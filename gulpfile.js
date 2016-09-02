@@ -23,7 +23,7 @@ function buildJavaScript() {
 }
 
 function watchJavaScript() {
-  return gulp.watch('./src/js/**/*.js', ['js']);
+  return gulp.watch('./src/js/**/*.js', ['build']);
 }
 
 gulp.task('build', buildJavaScript);
