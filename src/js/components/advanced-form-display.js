@@ -1,9 +1,10 @@
 import React from 'react';
-import {Field, Form} from 'formwood';
-import {minLength, passwordEquals, required} from '../validators';
+import Prism from "prismjs";
+import AdvancedForm from './advanced-form';
 
 
-const InputField = Field(React.createClass({
+const code = (
+`const InputField = Field(React.createClass({
   handleChange(e) {
     this.props.element.onChange(e).then(this.props.validate);
   },
@@ -168,6 +169,37 @@ export default React.createClass({
         <CheckboxField name="beep" label="Beep" validators={[required()]} />
         <button className="btn btn-primary" type="submit">Submit</button>
       </Form>
+    );
+  }
+});`
+);
+
+export default React.createClass({
+  code() {
+    return {
+      '__html': Prism.highlight(code, Prism.languages.javascript)
+    };
+  },
+
+  render() {
+    return (
+      <section id="advanced">
+        <div className="example-form">
+          <div className="container-fluid">
+            <div className="row">
+              <div className="col-xs-12">
+                <AdvancedForm/>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div className="example-code">
+          <pre
+            className="language-javascript"
+            dangerouslySetInnerHTML={this.code()}
+          />
+        </div>
+      </section>
     );
   }
 });

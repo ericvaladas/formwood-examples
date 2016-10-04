@@ -1,5 +1,6 @@
 const gulp = require('gulp');
 const webpackStream = require('webpack-stream');
+const sass = require('gulp-sass');
 
 function pack(filename) {
   return webpackStream({
@@ -17,7 +18,7 @@ function pack(filename) {
 }
 
 function buildJavaScript() {
-  return gulp.src('./src/js/app.js')
+  return gulp.src('./src/js/*.js')
     .pipe(pack('app.js'))
     .pipe(gulp.dest('./dist/js'));
 }
@@ -26,6 +27,20 @@ function watchJavaScript() {
   return gulp.watch('./src/js/**/*.js', ['build']);
 }
 
-gulp.task('build', buildJavaScript);
-gulp.task('watch', watchJavaScript);
+function buildCss() {
+  return gulp.src('./src/sass/main.scss')
+    .pipe(sass().on('error', sass.logError))
+    .pipe(gulp.dest('./dist/css'));
+}
+
+function watchSass() {
+  gulp.watch('./src/sass/**/*.scss', ['css']);
+}
+
+gulp.task('js', buildJavaScript);
+gulp.task('css', buildCss);
+gulp.task('build', ['js', 'css']);
+gulp.task('watch-js', watchJavaScript);
+gulp.task('watch-sass', watchSass);
+gulp.task('watch', ['watch-js', 'watch-sass']);
 gulp.task('default', ['build']);

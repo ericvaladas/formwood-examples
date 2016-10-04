@@ -16,9 +16,16 @@
     "babel-preset-react": "^6.11.1",
     "formwood": "0.0.14",
     "gulp": "^3.9.1",
+    "gulp-sass": "^2.3.2",
     "react": "^15.2.1",
     "react-dom": "^15.2.1",
     "webpack": "^1.13.1",
     "webpack-stream": "^3.2.0"
+  },
+  "dependencies": {
+    "block-loader": "^2.1.0",
+    "prismjs": "^1.5.1",
+    "react-prism": "^4.0.0",
+    "react-scrollspy": "^2.3.1"
   }
 }
