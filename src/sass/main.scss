@@ -74,13 +74,15 @@ main {
 
 pre {
   border: 0;
+  margin-top: 20px;
+  background-color: #ebf7e7;
 }
 
 pre[class*="language-"] {
   font-size: 12px;
   padding: 10px 20px;
-  margin-top: 10px;
   background-color: #f2f4f9;
+  margin-top: 10px;
 }
 
 h1 {
@@ -93,4 +95,11 @@ h2 {
 
 label {
   font-weight: 400;
+}
+
+.alert {
+  code {
+    color: inherit;
+    background-color: inherit;
+  }
 }

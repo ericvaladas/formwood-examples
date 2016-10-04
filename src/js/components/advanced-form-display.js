@@ -183,7 +183,7 @@ export default React.createClass({
 
   render() {
     return (
-      <section id="advanced">
+      <section {...this.props}>
         <div className="example-form">
           <div className="container-fluid">
             <div className="row">

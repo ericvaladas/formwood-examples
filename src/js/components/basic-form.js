@@ -15,16 +15,17 @@ const InputField = Field(React.createClass({
 
 export default React.createClass({
   handleSubmit(e, form) {
-    console.log(JSON.stringify(form.values));
+    this.setState({values: form.values});
   },
 
   render() {
     return (
       <Form onSubmit={this.handleSubmit}>
-        <h2>Simple Form</h2>
+        <h2>Basic Form</h2>
         <InputField type="text" name="username" id="username" label="Username"/>
         <InputField type="password" name="password" id="password" label="Password"/>
         <button className="btn btn-primary" type="submit">Submit</button>
+        <pre className="alert alert-success">{JSON.stringify(this.state || {}, null, 2)}</pre>
       </Form>
     );
   }

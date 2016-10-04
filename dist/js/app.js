@@ -66,15 +66,19 @@
 
 	var _reactScrollspy = __webpack_require__(469);
 
-	var _simpleFormDisplay = __webpack_require__(470);
+	var _basicFormDisplay = __webpack_require__(470);
 
-	var _simpleFormDisplay2 = _interopRequireDefault(_simpleFormDisplay);
+	var _basicFormDisplay2 = _interopRequireDefault(_basicFormDisplay);
 
-	var _validationFormDisplay = __webpack_require__(474);
+	var _formValidationDisplay = __webpack_require__(474);
 
-	var _validationFormDisplay2 = _interopRequireDefault(_validationFormDisplay);
+	var _formValidationDisplay2 = _interopRequireDefault(_formValidationDisplay);
 
-	var _advancedFormDisplay = __webpack_require__(477);
+	var _fieldValidationDisplay = __webpack_require__(477);
+
+	var _fieldValidationDisplay2 = _interopRequireDefault(_fieldValidationDisplay);
+
+	var _advancedFormDisplay = __webpack_require__(479);
 
 	var _advancedFormDisplay2 = _interopRequireDefault(_advancedFormDisplay);
 
@@ -82,8 +86,31 @@
 
 	var App = _react2.default.createClass({
 	  displayName: 'App',
+	  slugify: function slugify(value) {
+	    return value.toLowerCase().replace(/ /g, '-');
+	  },
+
+
+	  examples: ['Basic Form', 'Field Validation', 'Form Validation', 'Advanced Validation'],
+
+	  exampleLinks: function exampleLinks() {
+	    var _this = this;
+
+	    return this.examples.map(function (name) {
+	      var slug = _this.slugify(name);
+	      return _react2.default.createElement(
+	        'li',
+	        { key: slug },
+	        _react2.default.createElement(
+	          'a',
+	          { href: '#' + slug },
+	          name
+	        )
+	      );
+	    });
+	  },
 	  render: function render() {
-	    var items = ['simple', 'validation', 'advanced'];
+	    var examples = this.examples.map(this.slugify);
 	    return _react2.default.createElement(
 	      'div',
 	      null,
@@ -106,43 +133,18 @@
 	          ),
 	          _react2.default.createElement(
 	            _reactScrollspy.Scrollspy,
-	            { items: items, currentClassName: 'current' },
-	            _react2.default.createElement(
-	              'li',
-	              null,
-	              _react2.default.createElement(
-	                'a',
-	                { href: '#simple' },
-	                'Basic form'
-	              )
-	            ),
-	            _react2.default.createElement(
-	              'li',
-	              null,
-	              _react2.default.createElement(
-	                'a',
-	                { href: '#validation' },
-	                'Basic validation'
-	              )
-	            ),
-	            _react2.default.createElement(
-	              'li',
-	              null,
-	              _react2.default.createElement(
-	                'a',
-	                { href: '#advanced' },
-	                'Advanced validation'
-	              )
-	            )
+	            { items: examples, currentClassName: 'current' },
+	            this.exampleLinks()
 	          )
 	        )
 	      ),
 	      _react2.default.createElement(
 	        'main',
 	        null,
-	        _react2.default.createElement(_simpleFormDisplay2.default, null),
-	        _react2.default.createElement(_validationFormDisplay2.default, null),
-	        _react2.default.createElement(_advancedFormDisplay2.default, null)
+	        _react2.default.createElement(_basicFormDisplay2.default, { id: examples[0] }),
+	        _react2.default.createElement(_fieldValidationDisplay2.default, { id: examples[1] }),
+	        _react2.default.createElement(_formValidationDisplay2.default, { id: examples[2] }),
+	        _react2.default.createElement(_advancedFormDisplay2.default, { id: examples[3] })
 	      )
 	    );
 	  }
@@ -29697,16 +29699,16 @@
 
 	var _prismjs2 = _interopRequireDefault(_prismjs);
 
-	var _simpleForm = __webpack_require__(472);
+	var _basicForm = __webpack_require__(472);
 
-	var _simpleForm2 = _interopRequireDefault(_simpleForm);
+	var _basicForm2 = _interopRequireDefault(_basicForm);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	var _code = 'const InputField = Field(React.createClass({\n  render() {\n    return (\n      <div className="form-group">\n        <label className="control-label" htmlFor={this.props.id}>{this.props.label}</label>\n        <input className="form-control" {...this.props.element}/>\n      </div>\n    );\n  }\n}));\n\nexport default React.createClass({\n  handleSubmit(e, form) {\n    console.log(JSON.stringify(form.values));\n  },\n\n  render() {\n    return (\n      <Form onSubmit={this.handleSubmit}>\n        <h2>Simple Form</h2>\n        <InputField type="text" name="username" id="username" label="Username"/>\n        <InputField type="password" name="password" id="password" label="Password"/>\n        <button className="btn btn-primary" type="submit">Submit</button>\n      </Form>\n    );\n  }\n});';
+	var _code = 'const InputField = Field(React.createClass({\n  render() {\n    return (\n      <div className="form-group">\n        <label className="control-label" htmlFor={this.props.id}>{this.props.label}</label>\n        <input className="form-control" {...this.props.element}/>\n      </div>\n    );\n  }\n}));\n\nexport default React.createClass({\n  handleSubmit(e, form) {\n    this.setState({values: form.values});\n  },\n\n  render() {\n    return (\n      <Form onSubmit={this.handleSubmit}>\n        <h2>Basic Form</h2>\n        <InputField type="text" name="username" id="username" label="Username"/>\n        <InputField type="password" name="password" id="password" label="Password"/>\n        <button className="btn btn-primary" type="submit">Submit</button>\n        <pre className="alert alert-success">{JSON.stringify(this.state || {}, null, 2)}</pre>\n      </Form>\n    );\n  }\n});';
 
 	exports.default = _react2.default.createClass({
-	  displayName: 'simple-form-display',
+	  displayName: 'basic-form-display',
 	  code: function code() {
 	    return {
 	      '__html': _prismjs2.default.highlight(_code, _prismjs2.default.languages.javascript)
@@ -29715,7 +29717,7 @@
 	  render: function render() {
 	    return _react2.default.createElement(
 	      'section',
-	      { id: 'simple' },
+	      this.props,
 	      _react2.default.createElement(
 	        'div',
 	        { className: 'example-form' },
@@ -29728,7 +29730,7 @@
 	            _react2.default.createElement(
 	              'div',
 	              { className: 'col-xs-12' },
-	              _react2.default.createElement(_simpleForm2.default, null)
+	              _react2.default.createElement(_basicForm2.default, null)
 	            )
 	          )
 	        )
@@ -30570,9 +30572,9 @@
 	}));
 
 	exports.default = _react2.default.createClass({
-	  displayName: 'simple-form',
+	  displayName: 'basic-form',
 	  handleSubmit: function handleSubmit(e, form) {
-	    console.log(JSON.stringify(form.values));
+	    this.setState({ values: form.values });
 	  },
 	  render: function render() {
 	    return _react2.default.createElement(
@@ -30581,7 +30583,7 @@
 	      _react2.default.createElement(
 	        'h2',
 	        null,
-	        'Simple Form'
+	        'Basic Form'
 	      ),
 	      _react2.default.createElement(InputField, { type: 'text', name: 'username', id: 'username', label: 'Username' }),
 	      _react2.default.createElement(InputField, { type: 'password', name: 'password', id: 'password', label: 'Password' }),
@@ -30589,6 +30591,11 @@
 	        'button',
 	        { className: 'btn btn-primary', type: 'submit' },
 	        'Submit'
+	      ),
+	      _react2.default.createElement(
+	        'pre',
+	        { className: 'alert alert-success' },
+	        JSON.stringify(this.state || {}, null, 2)
 	      )
 	    );
 	  }
@@ -30710,9 +30717,31 @@
 		    return new Promise(function (resolve) {
 		      _this.invalidFields = {};
 		      for (var fieldName in _this.fields) {
-		        var field = _this.fields[fieldName];
-		        if (!field.validate()) {
-		          _this.invalidFields[fieldName] = field;
+		        var _iteratorNormalCompletion = true;
+		        var _didIteratorError = false;
+		        var _iteratorError = undefined;
+
+		        try {
+		          for (var _iterator = _this.fields[fieldName][Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+		            var field = _step.value;
+
+		            if (field && !field.validate()) {
+		              _this.invalidFields[fieldName] = field;
+		            }
+		          }
+		        } catch (err) {
+		          _didIteratorError = true;
+		          _iteratorError = err;
+		        } finally {
+		          try {
+		            if (!_iteratorNormalCompletion && _iterator.return) {
+		              _iterator.return();
+		            }
+		          } finally {
+		            if (_didIteratorError) {
+		              throw _iteratorError;
+		            }
+		          }
 		        }
 		      }
 		      _this.setState({
@@ -30724,7 +30753,7 @@
 		    var _this2 = this;
 
 		    e.preventDefault();
-		    this.validate().then(function () {
+		    return this.validate().then(function () {
 		      if (_this2.props.onSubmit) {
 		        _this2.props.onSubmit(e, {
 		          valid: _this2.state.valid,
@@ -30733,10 +30762,64 @@
 		      }
 		    });
 		  },
+		  getField: function getField(fieldName) {
+		    return this.fields[fieldName].sort(function (a, b) {
+		      return b.state.timestamp - a.state.timestamp;
+		    })[0];
+		  },
+		  getCheckboxValues: function getCheckboxValues(fieldName) {
+		    var fieldValues = [];
+		    var _iteratorNormalCompletion2 = true;
+		    var _didIteratorError2 = false;
+		    var _iteratorError2 = undefined;
+
+		    try {
+		      for (var _iterator2 = this.fields[fieldName][Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
+		        var field = _step2.value;
+
+		        if (field.state.value && field.state.checked) {
+		          fieldValues.push(field.state.value);
+		        }
+		      }
+		    } catch (err) {
+		      _didIteratorError2 = true;
+		      _iteratorError2 = err;
+		    } finally {
+		      try {
+		        if (!_iteratorNormalCompletion2 && _iterator2.return) {
+		          _iterator2.return();
+		        }
+		      } finally {
+		        if (_didIteratorError2) {
+		          throw _iteratorError2;
+		        }
+		      }
+		    }
+
+		    return fieldValues;
+		  },
 		  values: function values() {
 		    var values = {};
 		    for (var fieldName in this.fields) {
-		      values[fieldName] = this.fields[fieldName].state.value;
+		      var field = this.getField(fieldName);
+		      switch (field.state.type) {
+		        case 'checkbox':
+		          {
+		            var fieldValues = this.getCheckboxValues(fieldName);
+		            if (fieldValues.length === 1) {
+		              values[fieldName] = fieldValues[0];
+		            } else if (fieldValues.length > 1) {
+		              values[fieldName] = fieldValues;
+		            }
+		            break;
+		          }
+		        default:
+		          {
+		            if (field && field.state.value) {
+		              values[fieldName] = field.state.value;
+		            }
+		          }
+		      }
 		    }
 		    return values;
 		  },
@@ -30748,29 +30831,41 @@
 		      if (child.props) {
 		        childProps.children = _this3.addPropsToChildren(child.props.children, props);
 		        if (child.type.displayName === 'Field') {
-		          var values = _this3.props.values[child.props.name] || {};
+		          var formValues = _this3.props.values[child.props.name] || {};
+		          var values = {
+		            initialValue: formValues.value,
+		            message: formValues.message
+		          };
 		          childProps = Object.assign(childProps, values, props);
 		        }
-		        return _react2.default.cloneElement(child, childProps);
+		        child = _react2.default.cloneElement(child, childProps);
 		      }
 		      return child;
 		    });
 		  },
 		  children: function children() {
 		    var fields = {};
-		    var ref = { ref: function ref(field) {
+		    var ref = {
+		      ref: function ref(field) {
 		        if (field) {
-		          fields[field.props.name] = field;
+		          if (!fields[field.props.name]) {
+		            fields[field.props.name] = [];
+		          }
+		          fields[field.props.name].push(field);
 		        }
-		      } };
+		      }
+		    };
 		    var children = this.addPropsToChildren(this.props.children, ref);
 		    this.fields = fields;
 		    return children;
 		  },
 		  render: function render() {
+		    var formProps = Object.assign({}, this.props);
+		    delete formProps.values;
+
 		    return _react2.default.createElement(
 		      'form',
-		      _extends({}, this.props, { onSubmit: this.handleSubmit }),
+		      _extends({}, formProps, { onSubmit: this.handleSubmit }),
 		      this.children()
 		    );
 		  }
@@ -30792,97 +30887,131 @@
 		  value: true
 		});
 
+		var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
 		exports.default = function (WrappedComponent) {
 		  var Field = _react2.default.createClass({
 		    displayName: 'Field',
+
+		    propTypes: {
+		      name: _react2.default.PropTypes.string.isRequired
+		    },
+
 		    getInitialState: function getInitialState() {
 		      return {
-		        value: this.props.value,
+		        checked: this.checked(),
 		        message: this.props.message,
-		        valid: true
+		        timestamp: 0,
+		        valid: true,
+		        value: this.props.initialValue
 		      };
 		    },
-		    componentDidUpdate: function componentDidUpdate(prevProps) {
-		      if (prevProps.value !== this.props.value) {
-		        this.setState({ value: this.props.value });
+		    componentDidMount: function componentDidMount() {
+		      this.validators = this.props.validators || [];
+		      if (this.component && this.component.validators) {
+		        this.validators = this.component.validators.concat(this.validators);
 		      }
-		      if (prevProps.message !== this.props.message) {
-		        this.setState({ message: this.props.message });
+		    },
+		    componentWillReceiveProps: function componentWillReceiveProps(nextProps) {
+		      if (nextProps.message !== this.props.message) {
+		        this.setState({ message: nextProps.message });
 		      }
 		    },
 		    validate: function validate() {
-		      if (this.props.validators) {
-		        var _iteratorNormalCompletion = true;
-		        var _didIteratorError = false;
-		        var _iteratorError = undefined;
+		      var _iteratorNormalCompletion = true;
+		      var _didIteratorError = false;
+		      var _iteratorError = undefined;
 
-		        try {
-		          for (var _iterator = this.props.validators[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
-		            var validator = _step.value;
+		      try {
+		        for (var _iterator = this.validators[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+		          var validator = _step.value;
 
-		            var result = validator(this.state.value);
-		            if (result !== true) {
-		              this.setState({ valid: false, message: result });
-		              return false;
-		            }
+		          var result = validator(this.state.value);
+		          if (result !== true) {
+		            this.setState({ valid: false, message: result });
+		            return false;
 		          }
-		        } catch (err) {
-		          _didIteratorError = true;
-		          _iteratorError = err;
+		        }
+		      } catch (err) {
+		        _didIteratorError = true;
+		        _iteratorError = err;
+		      } finally {
+		        try {
+		          if (!_iteratorNormalCompletion && _iterator.return) {
+		            _iterator.return();
+		          }
 		        } finally {
-		          try {
-		            if (!_iteratorNormalCompletion && _iterator.return) {
-		              _iterator.return();
-		            }
-		          } finally {
-		            if (_didIteratorError) {
-		              throw _iteratorError;
-		            }
+		          if (_didIteratorError) {
+		            throw _iteratorError;
 		          }
 		        }
 		      }
+
 		      this.setState({ valid: true, message: '' });
 		      return true;
 		    },
 		    handleChange: function handleChange(event) {
 		      var _this = this;
 
+		      this.setState({
+		        type: event.target.type,
+		        timestamp: Date.now()
+		      });
+
 		      return new Promise(function (resolve) {
 		        switch (event.target.type) {
 		          case 'checkbox':
-		            _this.setState({ value: event.target.checked }, resolve);
+		            _this.setState({
+		              checked: event.target.checked,
+		              value: event.target.checked ? event.target.value : null
+		            }, resolve);
 		            break;
 		          case 'select-multiple':
 		            _this.setState({
-		              value: Array.from(event.target.selectedOptions).map(function (option) {
-		                return option.value;
-		              }) }, resolve);
+		              value: Array.from(event.target.options).map(function (option) {
+		                return option.selected ? option.value : null;
+		              }).filter(function (value) {
+		                return value;
+		              })
+		            }, resolve);
 		            break;
 		          default:
 		            _this.setState({ value: event.target.value }, resolve);
 		        }
 		      });
 		    },
+		    checked: function checked() {
+		      return this.props.checked || this.props.value && this.props.value === this.props.initialValue || this.props.initialValue && !this.props.value || this.props.initialValue && this.props.initialValue.constructor === Array && this.props.initialValue.indexOf(this.props.value) >= 0;
+		    },
 		    elementProps: function elementProps() {
 		      var elementProps = Object.assign({
-		        onChange: this.handleChange,
-		        defaultValue: this.props.value
+		        defaultChecked: this.checked(),
+		        defaultValue: this.props.value || this.props.initialValue,
+		        onChange: this.handleChange
 		      }, this.props);
 
+		      delete elementProps.checked;
+		      delete elementProps.initialValue;
+		      delete elementProps.label;
 		      delete elementProps.message;
 		      delete elementProps.validators;
 		      delete elementProps.value;
-
 		      return elementProps;
 		    },
 		    render: function render() {
-		      return _react2.default.createElement(WrappedComponent, {
-		        element: this.elementProps(),
-		        label: this.props.label,
+		      var _this2 = this;
+
+		      return _react2.default.createElement(WrappedComponent, _extends({
+		        element: this.elementProps()
+		      }, this.props, {
 		        message: this.state.message,
+		        valid: this.state.valid,
 		        validate: this.validate,
-		        value: this.state.value
-		      });
+		        value: this.state.value,
+		        ref: function ref(component) {
+		          _this2.component = component;
+		        }
+		      }));
 		    }
 		  });
 		  return Field;
@@ -30917,16 +31046,16 @@
 
 	var _prismjs2 = _interopRequireDefault(_prismjs);
 
-	var _validationForm = __webpack_require__(475);
+	var _formValidation = __webpack_require__(475);
 
-	var _validationForm2 = _interopRequireDefault(_validationForm);
+	var _formValidation2 = _interopRequireDefault(_formValidation);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	var _code = 'const InputField = Field(React.createClass({\n  render() {\n    let classNames = "form-group";\n    if (this.props.message) {\n      classNames += " has-error";\n    }\n    return (\n      <div className={classNames}>\n        <label className="control-label" htmlFor={this.props.id}>{this.props.label}</label>\n        <input className="form-control" {...this.props.element}/>\n        <span className="help-block">{this.props.message}</span>\n      </div>\n    );\n  }\n}));\n\nexport default React.createClass({\n  getInitialState() {\n    return {\n      values: {}\n    }\n  },\n\n  handleSubmit(e, form) {\n    if (form.valid) {\n      this.setState({values: {}});\n\n      // Get response from server\n      this.setState({\n        values: {\n          username: {message: "Username already exists"}\n        }\n      });\n    }\n  },\n\n  render() {\n    return (\n      <Form onSubmit={this.handleSubmit} values={this.state.values}>\n        <h2>Form With Validation</h2>\n        <InputField type="text" name="username" id="username" label="Username" validators={[required(), minLength(3)]}/>\n        <InputField type="password" name="password" id="password" label="Password" validators={[required(), minLength(6)]}/>\n        <button className="btn btn-primary" type="submit">Submit</button>\n      </Form>\n    );\n  }\n});';
+	var _code = 'export default React.createClass({\n  getInitialState() {\n    return {\n      formValues: {},\n      values: {}\n    }\n  },\n\n  handleSubmit(e, form) {\n    if (form.valid) {\n      this.setState({values: form.values, formValues: {}}, () => {\n        this.setState({\n          formValues: {\n            username: {message: "Username already exists"}\n          }\n        });\n      });\n    }\n  },\n\n  render() {\n    return (\n      <Form onSubmit={this.handleSubmit} values={this.state.formValues}>\n        <h2>Form Validation</h2>\n        <InputField type="text" name="username" label="Username"/>\n        <InputField type="password" name="password" label="Password"/>\n        <button className="btn btn-primary" type="submit">Submit</button>\n        <pre className="alert alert-success">{JSON.stringify(this.state, null, 2)}</pre>\n        <div className="alert alert-info" role="alert">\n          <code>InputField</code> is shown in the <a href="#basic" className="alert-link">Basic Form</a>.\n        </div>\n      </Form>\n    );\n  }\n});';
 
 	exports.default = _react2.default.createClass({
-	  displayName: 'validation-form-display',
+	  displayName: 'form-validation-display',
 	  code: function code() {
 	    return {
 	      '__html': _prismjs2.default.highlight(_code, _prismjs2.default.languages.javascript)
@@ -30935,7 +31064,7 @@
 	  render: function render() {
 	    return _react2.default.createElement(
 	      'section',
-	      { id: 'validation' },
+	      this.props,
 	      _react2.default.createElement(
 	        'div',
 	        { className: 'example-form' },
@@ -30948,7 +31077,7 @@
 	            _react2.default.createElement(
 	              'div',
 	              { className: 'col-xs-12' },
-	              _react2.default.createElement(_validationForm2.default, null)
+	              _react2.default.createElement(_formValidation2.default, null)
 	            )
 	          )
 	        )
@@ -30990,13 +31119,9 @@
 	var InputField = (0, _formwood.Field)(_react2.default.createClass({
 	  displayName: 'InputField',
 	  render: function render() {
-	    var classNames = "form-group";
-	    if (this.props.message) {
-	      classNames += " has-error";
-	    }
 	    return _react2.default.createElement(
 	      'div',
-	      { className: classNames },
+	      { className: 'form-group ' + (this.props.message ? 'has-error' : '') },
 	      _react2.default.createElement(
 	        'label',
 	        { className: 'control-label', htmlFor: this.props.id },
@@ -31013,39 +31138,62 @@
 	}));
 
 	exports.default = _react2.default.createClass({
-	  displayName: 'validation-form',
+	  displayName: 'form-validation',
 	  getInitialState: function getInitialState() {
 	    return {
+	      formValues: {},
 	      values: {}
 	    };
 	  },
 	  handleSubmit: function handleSubmit(e, form) {
-	    if (form.valid) {
-	      this.setState({ values: {} });
+	    var _this = this;
 
-	      // Get response from server
-	      this.setState({
-	        values: {
-	          username: { message: "Username already exists" }
-	        }
+	    if (form.valid) {
+	      this.setState({ values: form.values, formValues: {} }, function () {
+	        _this.setState({
+	          formValues: {
+	            username: { message: "Username already exists" }
+	          }
+	        });
 	      });
 	    }
 	  },
 	  render: function render() {
 	    return _react2.default.createElement(
 	      _formwood.Form,
-	      { onSubmit: this.handleSubmit, values: this.state.values },
+	      { onSubmit: this.handleSubmit, values: this.state.formValues },
 	      _react2.default.createElement(
 	        'h2',
 	        null,
-	        'Form With Validation'
+	        'Form Validation'
 	      ),
-	      _react2.default.createElement(InputField, { type: 'text', name: 'username', id: 'username', label: 'Username', validators: [(0, _validators.required)(), (0, _validators.minLength)(3)] }),
-	      _react2.default.createElement(InputField, { type: 'password', name: 'password', id: 'password', label: 'Password', validators: [(0, _validators.required)(), (0, _validators.minLength)(6)] }),
+	      _react2.default.createElement(InputField, { type: 'text', name: 'username', label: 'Username' }),
+	      _react2.default.createElement(InputField, { type: 'password', name: 'password', label: 'Password' }),
 	      _react2.default.createElement(
 	        'button',
 	        { className: 'btn btn-primary', type: 'submit' },
 	        'Submit'
+	      ),
+	      _react2.default.createElement(
+	        'pre',
+	        { className: 'alert alert-success' },
+	        JSON.stringify(this.state, null, 2)
+	      ),
+	      _react2.default.createElement(
+	        'div',
+	        { className: 'alert alert-info', role: 'alert' },
+	        _react2.default.createElement(
+	          'code',
+	          null,
+	          'InputField'
+	        ),
+	        ' is shown in the ',
+	        _react2.default.createElement(
+	          'a',
+	          { href: '#basic', className: 'alert-link' },
+	          'Basic Form'
+	        ),
+	        '.'
 	      )
 	    );
 	  }
@@ -31109,7 +31257,180 @@
 
 	var _prismjs2 = _interopRequireDefault(_prismjs);
 
-	var _advancedForm = __webpack_require__(478);
+	var _fieldValidation = __webpack_require__(478);
+
+	var _fieldValidation2 = _interopRequireDefault(_fieldValidation);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	var _code = 'function required() {\n  return (value) => {\n    if (!!value === true) {\n      return true;\n    }\n    return \'Required\';\n  };\n};\n\nfunction minLength(length) {\n  return (value) => {\n    if (value && value.length >= length) {\n      return true;\n    }\n    return `Must be at least ${length} characters`\n  };\n}\n\nexport default React.createClass({\n  handleSubmit(e, form) {\n    if (form.valid) {\n      this.setState({values: form.values});\n    }\n  },\n\n  render() {\n    return (\n      <Form onSubmit={this.handleSubmit} values={this.state.formValues}>\n        <h2>Field Validation</h2>\n        <InputField type="text" name="username" label="Username" validators={[required(), minLength(3)]}/>\n        <InputField type="password" name="password" label="Password" validators={[required(), minLength(6)]}/>\n        <button className="btn btn-primary" type="submit">Submit</button>\n        <pre className="alert alert-success">{JSON.stringify(this.state, null, 2)}</pre>\n        <div className="alert alert-info" role="alert">\n          <code>InputField</code> is shown in the <a href="#basic-form" className="alert-link"> Basic Form</a>.\n        </div>\n      </Form>\n    );\n  }\n});';
+
+	exports.default = _react2.default.createClass({
+	  displayName: 'field-validation-display',
+	  code: function code() {
+	    return {
+	      '__html': _prismjs2.default.highlight(_code, _prismjs2.default.languages.javascript)
+	    };
+	  },
+	  render: function render() {
+	    return _react2.default.createElement(
+	      'section',
+	      this.props,
+	      _react2.default.createElement(
+	        'div',
+	        { className: 'example-form' },
+	        _react2.default.createElement(
+	          'div',
+	          { className: 'container-fluid' },
+	          _react2.default.createElement(
+	            'div',
+	            { className: 'row' },
+	            _react2.default.createElement(
+	              'div',
+	              { className: 'col-xs-12' },
+	              _react2.default.createElement(_fieldValidation2.default, null)
+	            )
+	          )
+	        )
+	      ),
+	      _react2.default.createElement(
+	        'div',
+	        { className: 'example-code' },
+	        _react2.default.createElement('pre', {
+	          className: 'language-javascript',
+	          dangerouslySetInnerHTML: this.code()
+	        })
+	      )
+	    );
+	  }
+	});
+
+/***/ },
+/* 478 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
+	var _react = __webpack_require__(299);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _formwood = __webpack_require__(473);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function required() {
+	  return function (value) {
+	    if (!!value === true) {
+	      return true;
+	    }
+	    return 'Required';
+	  };
+	};
+
+	function minLength(length) {
+	  return function (value) {
+	    if (value && value.length >= length) {
+	      return true;
+	    }
+	    return 'Must be at least ' + length + ' characters';
+	  };
+	}
+
+	var InputField = (0, _formwood.Field)(_react2.default.createClass({
+	  displayName: 'InputField',
+	  render: function render() {
+	    return _react2.default.createElement(
+	      'div',
+	      { className: 'form-group ' + (this.props.message ? 'has-error' : '') },
+	      _react2.default.createElement(
+	        'label',
+	        { className: 'control-label', htmlFor: this.props.id },
+	        this.props.label
+	      ),
+	      _react2.default.createElement('input', _extends({ className: 'form-control' }, this.props.element)),
+	      _react2.default.createElement(
+	        'span',
+	        { className: 'help-block' },
+	        this.props.message
+	      )
+	    );
+	  }
+	}));
+
+	exports.default = _react2.default.createClass({
+	  displayName: 'field-validation',
+	  handleSubmit: function handleSubmit(e, form) {
+	    if (form.valid) {
+	      this.setState({ values: form.values });
+	    }
+	  },
+	  render: function render() {
+	    return _react2.default.createElement(
+	      _formwood.Form,
+	      { onSubmit: this.handleSubmit },
+	      _react2.default.createElement(
+	        'h2',
+	        null,
+	        'Field Validation'
+	      ),
+	      _react2.default.createElement(InputField, { type: 'text', name: 'username', label: 'Username', validators: [required(), minLength(3)] }),
+	      _react2.default.createElement(InputField, { type: 'password', name: 'password', label: 'Password', validators: [required(), minLength(6)] }),
+	      _react2.default.createElement(
+	        'button',
+	        { className: 'btn btn-primary', type: 'submit' },
+	        'Submit'
+	      ),
+	      _react2.default.createElement(
+	        'pre',
+	        { className: 'alert alert-success' },
+	        JSON.stringify(this.state || {}, null, 2)
+	      ),
+	      _react2.default.createElement(
+	        'div',
+	        { className: 'alert alert-info', role: 'alert' },
+	        _react2.default.createElement(
+	          'code',
+	          null,
+	          'InputField'
+	        ),
+	        ' is shown in the ',
+	        _react2.default.createElement(
+	          'a',
+	          { href: '#basic-form', className: 'alert-link' },
+	          ' Basic Form'
+	        ),
+	        '.'
+	      )
+	    );
+	  }
+	});
+
+/***/ },
+/* 479 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _react = __webpack_require__(299);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _prismjs = __webpack_require__(471);
+
+	var _prismjs2 = _interopRequireDefault(_prismjs);
+
+	var _advancedForm = __webpack_require__(480);
 
 	var _advancedForm2 = _interopRequireDefault(_advancedForm);
 
@@ -31127,7 +31448,7 @@
 	  render: function render() {
 	    return _react2.default.createElement(
 	      'section',
-	      { id: 'advanced' },
+	      this.props,
 	      _react2.default.createElement(
 	        'div',
 	        { className: 'example-form' },
@@ -31158,7 +31479,7 @@
 	});
 
 /***/ },
-/* 478 */
+/* 480 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';

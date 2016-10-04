@@ -1,52 +1,33 @@
 import React from 'react';
 import Prism from "prismjs";
-import ValidationForm from './validation-form';
+import BasicForm from './basic-form';
 
 
 const code = (
 `const InputField = Field(React.createClass({
   render() {
-    let classNames = "form-group";
-    if (this.props.message) {
-      classNames += " has-error";
-    }
     return (
-      <div className={classNames}>
+      <div className="form-group">
         <label className="control-label" htmlFor={this.props.id}>{this.props.label}</label>
         <input className="form-control" {...this.props.element}/>
-        <span className="help-block">{this.props.message}</span>
       </div>
     );
   }
 }));
 
 export default React.createClass({
-  getInitialState() {
-    return {
-      values: {}
-    }
-  },
-
   handleSubmit(e, form) {
-    if (form.valid) {
-      this.setState({values: {}});
-
-      // Get response from server
-      this.setState({
-        values: {
-          username: {message: "Username already exists"}
-        }
-      });
-    }
+    this.setState({values: form.values});
   },
 
   render() {
     return (
-      <Form onSubmit={this.handleSubmit} values={this.state.values}>
-        <h2>Form With Validation</h2>
-        <InputField type="text" name="username" id="username" label="Username" validators={[required(), minLength(3)]}/>
-        <InputField type="password" name="password" id="password" label="Password" validators={[required(), minLength(6)]}/>
+      <Form onSubmit={this.handleSubmit}>
+        <h2>Basic Form</h2>
+        <InputField type="text" name="username" id="username" label="Username"/>
+        <InputField type="password" name="password" id="password" label="Password"/>
         <button className="btn btn-primary" type="submit">Submit</button>
+        <pre className="alert alert-success">{JSON.stringify(this.state || {}, null, 2)}</pre>
       </Form>
     );
   }
@@ -62,12 +43,12 @@ export default React.createClass({
 
   render() {
     return (
-      <section id="validation">
+      <section {...this.props}>
         <div className="example-form">
           <div className="container-fluid">
             <div className="row">
               <div className="col-xs-12">
-                <ValidationForm/>
+                <BasicForm/>
               </div>
             </div>
           </div>
