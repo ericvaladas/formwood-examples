@@ -91,7 +91,7 @@
 	  },
 
 
-	  examples: ['Basic Form', 'Field Validation', 'Form Validation', 'Advanced Validation'],
+	  examples: ['Basic Form', 'Field Validation', 'Form Validation'],
 
 	  exampleLinks: function exampleLinks() {
 	    var _this = this;
@@ -143,8 +143,7 @@
 	        null,
 	        _react2.default.createElement(_basicFormDisplay2.default, { id: examples[0] }),
 	        _react2.default.createElement(_fieldValidationDisplay2.default, { id: examples[1] }),
-	        _react2.default.createElement(_formValidationDisplay2.default, { id: examples[2] }),
-	        _react2.default.createElement(_advancedFormDisplay2.default, { id: examples[3] })
+	        _react2.default.createElement(_formValidationDisplay2.default, { id: examples[2] })
 	      )
 	    );
 	  }
@@ -164,14 +163,10 @@
 
 	__webpack_require__(296);
 
-	/* eslint max-len: 0 */
-
 	if (global._babelPolyfill) {
 	  throw new Error("only one instance of babel-polyfill is allowed");
 	}
 	global._babelPolyfill = true;
-
-	// Should be removed in the next major release:
 
 	var DEFINE_PROPERTY = "defineProperty";
 	function define(O, key, value) {
@@ -9092,14 +9087,6 @@
 	  var source = null;
 
 	  if (config != null) {
-	    if (process.env.NODE_ENV !== 'production') {
-	      process.env.NODE_ENV !== 'production' ? warning(
-	      /* eslint-disable no-proto */
-	      config.__proto__ == null || config.__proto__ === Object.prototype,
-	      /* eslint-enable no-proto */
-	      'React.createElement(...): Expected props argument to be a plain object. ' + 'Properties defined in its prototype chain will be ignored.') : void 0;
-	    }
-
 	    if (hasValidRef(config)) {
 	      ref = config.ref;
 	    }
@@ -9200,14 +9187,6 @@
 	  var owner = element._owner;
 
 	  if (config != null) {
-	    if (process.env.NODE_ENV !== 'production') {
-	      process.env.NODE_ENV !== 'production' ? warning(
-	      /* eslint-disable no-proto */
-	      config.__proto__ == null || config.__proto__ === Object.prototype,
-	      /* eslint-enable no-proto */
-	      'React.cloneElement(...): Expected props argument to be a plain object. ' + 'Properties defined in its prototype chain will be ignored.') : void 0;
-	    }
-
 	    if (hasValidRef(config)) {
 	      // Silently steal the ref from the parent.
 	      ref = config.ref;
@@ -12241,7 +12220,7 @@
 
 	'use strict';
 
-	module.exports = '15.3.1';
+	module.exports = '15.3.2';
 
 /***/ },
 /* 330 */
@@ -13223,8 +13202,10 @@
 	function getFallbackBeforeInputChars(topLevelType, nativeEvent) {
 	  // If we are currently composing (IME) and using a fallback to do so,
 	  // try to extract the composed characters from the fallback object.
+	  // If composition event is available, we extract a string only at
+	  // compositionevent, otherwise extract it at fallback events.
 	  if (currentComposition) {
-	    if (topLevelType === topLevelTypes.topCompositionEnd || isFallbackCompositionEnd(topLevelType, nativeEvent)) {
+	    if (topLevelType === topLevelTypes.topCompositionEnd || !canUseCompositionEvent && isFallbackCompositionEnd(topLevelType, nativeEvent)) {
 	      var chars = currentComposition.getData();
 	      FallbackCompositionState.release(currentComposition);
 	      currentComposition = null;
@@ -14833,7 +14814,8 @@
 
 	    if (event.preventDefault) {
 	      event.preventDefault();
-	    } else {
+	    } else if (typeof event.returnValue !== 'unknown') {
+	      // eslint-disable-line valid-typeof
 	      event.returnValue = false;
 	    }
 	    this.isDefaultPrevented = emptyFunction.thatReturnsTrue;
@@ -15090,7 +15072,7 @@
 	var doesChangeEventBubble = false;
 	if (ExecutionEnvironment.canUseDOM) {
 	  // See `handleChange` comment below
-	  doesChangeEventBubble = isEventSupported('change') && (!('documentMode' in document) || document.documentMode > 8);
+	  doesChangeEventBubble = isEventSupported('change') && (!document.documentMode || document.documentMode > 8);
 	}
 
 	function manualDispatchChangeEvent(nativeEvent) {
@@ -15156,7 +15138,7 @@
 	  // deleting text, so we ignore its input events.
 	  // IE10+ fire input events to often, such when a placeholder
 	  // changes or when an input with a placeholder is focused.
-	  isInputEventSupported = isEventSupported('input') && (!('documentMode' in document) || document.documentMode > 11);
+	  isInputEventSupported = isEventSupported('input') && (!document.documentMode || document.documentMode > 11);
 	}
 
 	/**
@@ -16385,12 +16367,6 @@
 	    endLifeCycleTimer(debugID, timerType);
 	    emitEvent('onEndLifeCycleTimer', debugID, timerType);
 	  },
-	  onError: function (debugID) {
-	    if (currentTimerDebugID != null) {
-	      endLifeCycleTimer(currentTimerDebugID, currentTimerType);
-	    }
-	    emitEvent('onError', debugID);
-	  },
 	  onBeginProcessingChildContext: function () {
 	    emitEvent('onBeginProcessingChildContext');
 	  },
@@ -17464,6 +17440,8 @@
 	    allowFullScreen: HAS_BOOLEAN_VALUE,
 	    allowTransparency: 0,
 	    alt: 0,
+	    // specifies target context for links with `preload` type
+	    as: 0,
 	    async: HAS_BOOLEAN_VALUE,
 	    autoComplete: 0,
 	    // autoFocus is polyfilled/normalized by AutoFocusUtils
@@ -17544,6 +17522,7 @@
 	    optimum: 0,
 	    pattern: 0,
 	    placeholder: 0,
+	    playsInline: HAS_BOOLEAN_VALUE,
 	    poster: 0,
 	    preload: 0,
 	    profile: 0,
@@ -18066,9 +18045,9 @@
 	  if (node.namespaceURI === DOMNamespaces.svg && !('innerHTML' in node)) {
 	    reusableSVGContainer = reusableSVGContainer || document.createElement('div');
 	    reusableSVGContainer.innerHTML = '<svg>' + html + '</svg>';
-	    var newNodes = reusableSVGContainer.firstChild.childNodes;
-	    for (var i = 0; i < newNodes.length; i++) {
-	      node.appendChild(newNodes[i]);
+	    var svgNode = reusableSVGContainer.firstChild;
+	    while (svgNode.firstChild) {
+	      node.appendChild(svgNode.firstChild);
 	    }
 	  } else {
 	    node.innerHTML = html;
@@ -18996,9 +18975,9 @@
 	  ReactDOMOption.postMountWrapper(inst);
 	}
 
-	var setContentChildForInstrumentation = emptyFunction;
+	var setAndValidateContentChildDev = emptyFunction;
 	if (process.env.NODE_ENV !== 'production') {
-	  setContentChildForInstrumentation = function (content) {
+	  setAndValidateContentChildDev = function (content) {
 	    var hasExistingContent = this._contentDebugID != null;
 	    var debugID = this._debugID;
 	    // This ID represents the inlined child that has no backing instance:
@@ -19012,6 +18991,7 @@
 	      return;
 	    }
 
+	    validateDOMNesting(null, String(content), this, this._ancestorInfo);
 	    this._contentDebugID = contentDebugID;
 	    if (hasExistingContent) {
 	      ReactInstrumentation.debugTool.onBeforeUpdateComponent(contentDebugID, content);
@@ -19186,7 +19166,7 @@
 	  this._flags = 0;
 	  if (process.env.NODE_ENV !== 'production') {
 	    this._ancestorInfo = null;
-	    setContentChildForInstrumentation.call(this, null);
+	    setAndValidateContentChildDev.call(this, null);
 	  }
 	}
 
@@ -19286,7 +19266,7 @@
 	      if (parentInfo) {
 	        // parentInfo should always be present except for the top-level
 	        // component when server rendering
-	        validateDOMNesting(this._tag, this, parentInfo);
+	        validateDOMNesting(this._tag, null, this, parentInfo);
 	      }
 	      this._ancestorInfo = validateDOMNesting.updatedAncestorInfo(parentInfo, this._tag, this);
 	    }
@@ -19455,7 +19435,7 @@
 	        // TODO: Validate that text is allowed as a child of this node
 	        ret = escapeTextContentForBrowser(contentToUse);
 	        if (process.env.NODE_ENV !== 'production') {
-	          setContentChildForInstrumentation.call(this, contentToUse);
+	          setAndValidateContentChildDev.call(this, contentToUse);
 	        }
 	      } else if (childrenToUse != null) {
 	        var mountImages = this.mountChildren(childrenToUse, transaction, context);
@@ -19492,7 +19472,7 @@
 	      if (contentToUse != null) {
 	        // TODO: Validate that text is allowed as a child of this node
 	        if (process.env.NODE_ENV !== 'production') {
-	          setContentChildForInstrumentation.call(this, contentToUse);
+	          setAndValidateContentChildDev.call(this, contentToUse);
 	        }
 	        DOMLazyTree.queueText(lazyTree, contentToUse);
 	      } else if (childrenToUse != null) {
@@ -19724,7 +19704,7 @@
 	      if (lastContent !== nextContent) {
 	        this.updateTextContent('' + nextContent);
 	        if (process.env.NODE_ENV !== 'production') {
-	          setContentChildForInstrumentation.call(this, nextContent);
+	          setAndValidateContentChildDev.call(this, nextContent);
 	        }
 	      }
 	    } else if (nextHtml != null) {
@@ -19736,7 +19716,7 @@
 	      }
 	    } else if (nextChildren != null) {
 	      if (process.env.NODE_ENV !== 'production') {
-	        setContentChildForInstrumentation.call(this, null);
+	        setAndValidateContentChildDev.call(this, null);
 	      }
 
 	      this.updateChildren(nextChildren, transaction, context);
@@ -19791,7 +19771,7 @@
 	    this._wrapperState = null;
 
 	    if (process.env.NODE_ENV !== 'production') {
-	      setContentChildForInstrumentation.call(this, null);
+	      setAndValidateContentChildDev.call(this, null);
 	    }
 	  },
 
@@ -21064,6 +21044,19 @@
 	  },
 
 	  /**
+	   * Protect against document.createEvent() returning null
+	   * Some popup blocker extensions appear to do this:
+	   * https://github.com/facebook/react/issues/6887
+	   */
+	  supportsEventPageXY: function () {
+	    if (!document.createEvent) {
+	      return false;
+	    }
+	    var ev = document.createEvent('MouseEvent');
+	    return ev != null && 'pageX' in ev;
+	  },
+
+	  /**
 	   * Listens to window scroll and resize events. We cache scroll values so that
 	   * application code can access them without triggering reflows.
 	   *
@@ -21076,7 +21069,7 @@
 	   */
 	  ensureScrollValueMonitoring: function () {
 	    if (hasEventPageXY === undefined) {
-	      hasEventPageXY = document.createEvent && 'pageX' in document.createEvent('MouseEvent');
+	      hasEventPageXY = ReactBrowserEventEmitter.supportsEventPageXY();
 	    }
 	    if (!hasEventPageXY && !isMonitoringScrollValue) {
 	      var refresh = ViewportMetrics.refreshScrollValues;
@@ -21362,7 +21355,7 @@
 
 	function isControlled(props) {
 	  var usesChecked = props.type === 'checkbox' || props.type === 'radio';
-	  return usesChecked ? props.checked !== undefined : props.value !== undefined;
+	  return usesChecked ? props.checked != null : props.value != null;
 	}
 
 	/**
@@ -23135,34 +23128,29 @@
 	  }
 	}
 
-	function invokeComponentDidMountWithTimer() {
-	  var publicInstance = this._instance;
-	  if (this._debugID !== 0) {
-	    ReactInstrumentation.debugTool.onBeginLifeCycleTimer(this._debugID, 'componentDidMount');
-	  }
-	  publicInstance.componentDidMount();
-	  if (this._debugID !== 0) {
-	    ReactInstrumentation.debugTool.onEndLifeCycleTimer(this._debugID, 'componentDidMount');
-	  }
-	}
-
-	function invokeComponentDidUpdateWithTimer(prevProps, prevState, prevContext) {
-	  var publicInstance = this._instance;
-	  if (this._debugID !== 0) {
-	    ReactInstrumentation.debugTool.onBeginLifeCycleTimer(this._debugID, 'componentDidUpdate');
-	  }
-	  publicInstance.componentDidUpdate(prevProps, prevState, prevContext);
-	  if (this._debugID !== 0) {
-	    ReactInstrumentation.debugTool.onEndLifeCycleTimer(this._debugID, 'componentDidUpdate');
-	  }
-	}
-
 	function shouldConstruct(Component) {
 	  return !!(Component.prototype && Component.prototype.isReactComponent);
 	}
 
 	function isPureComponent(Component) {
 	  return !!(Component.prototype && Component.prototype.isPureReactComponent);
+	}
+
+	// Separated into a function to contain deoptimizations caused by try/finally.
+	function measureLifeCyclePerf(fn, debugID, timerType) {
+	  if (debugID === 0) {
+	    // Top-level wrappers (see ReactMount) and empty components (see
+	    // ReactDOMEmptyComponent) are invisible to hooks and devtools.
+	    // Both are implementation details that should go away in the future.
+	    return fn();
+	  }
+
+	  ReactInstrumentation.debugTool.onBeginLifeCycleTimer(debugID, timerType);
+	  try {
+	    return fn();
+	  } finally {
+	    ReactInstrumentation.debugTool.onEndLifeCycleTimer(debugID, timerType);
+	  }
 	}
 
 	/**
@@ -23256,6 +23244,8 @@
 	   * @internal
 	   */
 	  mountComponent: function (transaction, hostParent, hostContainerInfo, context) {
+	    var _this = this;
+
 	    this._context = context;
 	    this._mountOrder = nextMountID++;
 	    this._hostParent = hostParent;
@@ -23345,7 +23335,11 @@
 
 	    if (inst.componentDidMount) {
 	      if (process.env.NODE_ENV !== 'production') {
-	        transaction.getReactMountReady().enqueue(invokeComponentDidMountWithTimer, this);
+	        transaction.getReactMountReady().enqueue(function () {
+	          measureLifeCyclePerf(function () {
+	            return inst.componentDidMount();
+	          }, _this._debugID, 'componentDidMount');
+	        });
 	      } else {
 	        transaction.getReactMountReady().enqueue(inst.componentDidMount, inst);
 	      }
@@ -23369,35 +23363,26 @@
 
 	  _constructComponentWithoutOwner: function (doConstruct, publicProps, publicContext, updateQueue) {
 	    var Component = this._currentElement.type;
-	    var instanceOrElement;
+
 	    if (doConstruct) {
 	      if (process.env.NODE_ENV !== 'production') {
-	        if (this._debugID !== 0) {
-	          ReactInstrumentation.debugTool.onBeginLifeCycleTimer(this._debugID, 'ctor');
-	        }
-	      }
-	      instanceOrElement = new Component(publicProps, publicContext, updateQueue);
-	      if (process.env.NODE_ENV !== 'production') {
-	        if (this._debugID !== 0) {
-	          ReactInstrumentation.debugTool.onEndLifeCycleTimer(this._debugID, 'ctor');
-	        }
-	      }
-	    } else {
-	      // This can still be an instance in case of factory components
-	      // but we'll count this as time spent rendering as the more common case.
-	      if (process.env.NODE_ENV !== 'production') {
-	        if (this._debugID !== 0) {
-	          ReactInstrumentation.debugTool.onBeginLifeCycleTimer(this._debugID, 'render');
-	        }
-	      }
-	      instanceOrElement = Component(publicProps, publicContext, updateQueue);
-	      if (process.env.NODE_ENV !== 'production') {
-	        if (this._debugID !== 0) {
-	          ReactInstrumentation.debugTool.onEndLifeCycleTimer(this._debugID, 'render');
-	        }
+	        return measureLifeCyclePerf(function () {
+	          return new Component(publicProps, publicContext, updateQueue);
+	        }, this._debugID, 'ctor');
+	      } else {
+	        return new Component(publicProps, publicContext, updateQueue);
 	      }
 	    }
-	    return instanceOrElement;
+
+	    // This can still be an instance in case of factory components
+	    // but we'll count this as time spent rendering as the more common case.
+	    if (process.env.NODE_ENV !== 'production') {
+	      return measureLifeCyclePerf(function () {
+	        return Component(publicProps, publicContext, updateQueue);
+	      }, this._debugID, 'render');
+	    } else {
+	      return Component(publicProps, publicContext, updateQueue);
+	    }
 	  },
 
 	  performInitialMountWithErrorHandling: function (renderedElement, hostParent, hostContainerInfo, transaction, context) {
@@ -23406,11 +23391,6 @@
 	    try {
 	      markup = this.performInitialMount(renderedElement, hostParent, hostContainerInfo, transaction, context);
 	    } catch (e) {
-	      if (process.env.NODE_ENV !== 'production') {
-	        if (this._debugID !== 0) {
-	          ReactInstrumentation.debugTool.onError();
-	        }
-	      }
 	      // Roll back to checkpoint, handle error (which may add items to the transaction), and take a new checkpoint
 	      transaction.rollback(checkpoint);
 	      this._instance.unstable_handleError(e);
@@ -23431,17 +23411,19 @@
 
 	  performInitialMount: function (renderedElement, hostParent, hostContainerInfo, transaction, context) {
 	    var inst = this._instance;
+
+	    var debugID = 0;
+	    if (process.env.NODE_ENV !== 'production') {
+	      debugID = this._debugID;
+	    }
+
 	    if (inst.componentWillMount) {
 	      if (process.env.NODE_ENV !== 'production') {
-	        if (this._debugID !== 0) {
-	          ReactInstrumentation.debugTool.onBeginLifeCycleTimer(this._debugID, 'componentWillMount');
-	        }
-	      }
-	      inst.componentWillMount();
-	      if (process.env.NODE_ENV !== 'production') {
-	        if (this._debugID !== 0) {
-	          ReactInstrumentation.debugTool.onEndLifeCycleTimer(this._debugID, 'componentWillMount');
-	        }
+	        measureLifeCyclePerf(function () {
+	          return inst.componentWillMount();
+	        }, debugID, 'componentWillMount');
+	      } else {
+	        inst.componentWillMount();
 	      }
 	      // When mounting, calls to `setState` by `componentWillMount` will set
 	      // `this._pendingStateQueue` without triggering a re-render.
@@ -23461,15 +23443,12 @@
 	    );
 	    this._renderedComponent = child;
 
-	    var selfDebugID = 0;
-	    if (process.env.NODE_ENV !== 'production') {
-	      selfDebugID = this._debugID;
-	    }
-	    var markup = ReactReconciler.mountComponent(child, transaction, hostParent, hostContainerInfo, this._processChildContext(context), selfDebugID);
+	    var markup = ReactReconciler.mountComponent(child, transaction, hostParent, hostContainerInfo, this._processChildContext(context), debugID);
 
 	    if (process.env.NODE_ENV !== 'production') {
-	      if (this._debugID !== 0) {
-	        ReactInstrumentation.debugTool.onSetChildren(this._debugID, child._debugID !== 0 ? [child._debugID] : []);
+	      if (debugID !== 0) {
+	        var childDebugIDs = child._debugID !== 0 ? [child._debugID] : [];
+	        ReactInstrumentation.debugTool.onSetChildren(debugID, childDebugIDs);
 	      }
 	    }
 
@@ -23490,24 +23469,22 @@
 	    if (!this._renderedComponent) {
 	      return;
 	    }
+
 	    var inst = this._instance;
 
 	    if (inst.componentWillUnmount && !inst._calledComponentWillUnmount) {
 	      inst._calledComponentWillUnmount = true;
-	      if (process.env.NODE_ENV !== 'production') {
-	        if (this._debugID !== 0) {
-	          ReactInstrumentation.debugTool.onBeginLifeCycleTimer(this._debugID, 'componentWillUnmount');
-	        }
-	      }
+
 	      if (safely) {
 	        var name = this.getName() + '.componentWillUnmount()';
 	        ReactErrorUtils.invokeGuardedCallback(name, inst.componentWillUnmount.bind(inst));
 	      } else {
-	        inst.componentWillUnmount();
-	      }
-	      if (process.env.NODE_ENV !== 'production') {
-	        if (this._debugID !== 0) {
-	          ReactInstrumentation.debugTool.onEndLifeCycleTimer(this._debugID, 'componentWillUnmount');
+	        if (process.env.NODE_ENV !== 'production') {
+	          measureLifeCyclePerf(function () {
+	            return inst.componentWillUnmount();
+	          }, this._debugID, 'componentWillUnmount');
+	        } else {
+	          inst.componentWillUnmount();
 	        }
 	      }
 	    }
@@ -23594,13 +23571,21 @@
 	  _processChildContext: function (currentContext) {
 	    var Component = this._currentElement.type;
 	    var inst = this._instance;
-	    if (process.env.NODE_ENV !== 'production') {
-	      ReactInstrumentation.debugTool.onBeginProcessingChildContext();
+	    var childContext;
+
+	    if (inst.getChildContext) {
+	      if (process.env.NODE_ENV !== 'production') {
+	        ReactInstrumentation.debugTool.onBeginProcessingChildContext();
+	        try {
+	          childContext = inst.getChildContext();
+	        } finally {
+	          ReactInstrumentation.debugTool.onEndProcessingChildContext();
+	        }
+	      } else {
+	        childContext = inst.getChildContext();
+	      }
 	    }
-	    var childContext = inst.getChildContext && inst.getChildContext();
-	    if (process.env.NODE_ENV !== 'production') {
-	      ReactInstrumentation.debugTool.onEndProcessingChildContext();
-	    }
+
 	    if (childContext) {
 	      !(typeof Component.childContextTypes === 'object') ? process.env.NODE_ENV !== 'production' ? invariant(false, '%s.getChildContext(): childContextTypes must be defined in order to use getChildContext().', this.getName() || 'ReactCompositeComponent') : _prodInvariant('107', this.getName() || 'ReactCompositeComponent') : void 0;
 	      if (process.env.NODE_ENV !== 'production') {
@@ -23695,15 +23680,11 @@
 	    // immediately reconciled instead of waiting for the next batch.
 	    if (willReceive && inst.componentWillReceiveProps) {
 	      if (process.env.NODE_ENV !== 'production') {
-	        if (this._debugID !== 0) {
-	          ReactInstrumentation.debugTool.onBeginLifeCycleTimer(this._debugID, 'componentWillReceiveProps');
-	        }
-	      }
-	      inst.componentWillReceiveProps(nextProps, nextContext);
-	      if (process.env.NODE_ENV !== 'production') {
-	        if (this._debugID !== 0) {
-	          ReactInstrumentation.debugTool.onEndLifeCycleTimer(this._debugID, 'componentWillReceiveProps');
-	        }
+	        measureLifeCyclePerf(function () {
+	          return inst.componentWillReceiveProps(nextProps, nextContext);
+	        }, this._debugID, 'componentWillReceiveProps');
+	      } else {
+	        inst.componentWillReceiveProps(nextProps, nextContext);
 	      }
 	    }
 
@@ -23713,15 +23694,11 @@
 	    if (!this._pendingForceUpdate) {
 	      if (inst.shouldComponentUpdate) {
 	        if (process.env.NODE_ENV !== 'production') {
-	          if (this._debugID !== 0) {
-	            ReactInstrumentation.debugTool.onBeginLifeCycleTimer(this._debugID, 'shouldComponentUpdate');
-	          }
-	        }
-	        shouldUpdate = inst.shouldComponentUpdate(nextProps, nextState, nextContext);
-	        if (process.env.NODE_ENV !== 'production') {
-	          if (this._debugID !== 0) {
-	            ReactInstrumentation.debugTool.onEndLifeCycleTimer(this._debugID, 'shouldComponentUpdate');
-	          }
+	          shouldUpdate = measureLifeCyclePerf(function () {
+	            return inst.shouldComponentUpdate(nextProps, nextState, nextContext);
+	          }, this._debugID, 'shouldComponentUpdate');
+	        } else {
+	          shouldUpdate = inst.shouldComponentUpdate(nextProps, nextState, nextContext);
 	        }
 	      } else {
 	        if (this._compositeType === CompositeTypes.PureClass) {
@@ -23787,6 +23764,8 @@
 	   * @private
 	   */
 	  _performComponentUpdate: function (nextElement, nextProps, nextState, nextContext, transaction, unmaskedContext) {
+	    var _this2 = this;
+
 	    var inst = this._instance;
 
 	    var hasComponentDidUpdate = Boolean(inst.componentDidUpdate);
@@ -23801,15 +23780,11 @@
 
 	    if (inst.componentWillUpdate) {
 	      if (process.env.NODE_ENV !== 'production') {
-	        if (this._debugID !== 0) {
-	          ReactInstrumentation.debugTool.onBeginLifeCycleTimer(this._debugID, 'componentWillUpdate');
-	        }
-	      }
-	      inst.componentWillUpdate(nextProps, nextState, nextContext);
-	      if (process.env.NODE_ENV !== 'production') {
-	        if (this._debugID !== 0) {
-	          ReactInstrumentation.debugTool.onEndLifeCycleTimer(this._debugID, 'componentWillUpdate');
-	        }
+	        measureLifeCyclePerf(function () {
+	          return inst.componentWillUpdate(nextProps, nextState, nextContext);
+	        }, this._debugID, 'componentWillUpdate');
+	      } else {
+	        inst.componentWillUpdate(nextProps, nextState, nextContext);
 	      }
 	    }
 
@@ -23823,7 +23798,9 @@
 
 	    if (hasComponentDidUpdate) {
 	      if (process.env.NODE_ENV !== 'production') {
-	        transaction.getReactMountReady().enqueue(invokeComponentDidUpdateWithTimer.bind(this, prevProps, prevState, prevContext), this);
+	        transaction.getReactMountReady().enqueue(function () {
+	          measureLifeCyclePerf(inst.componentDidUpdate.bind(inst, prevProps, prevState, prevContext), _this2._debugID, 'componentDidUpdate');
+	        });
 	      } else {
 	        transaction.getReactMountReady().enqueue(inst.componentDidUpdate.bind(inst, prevProps, prevState, prevContext), inst);
 	      }
@@ -23840,6 +23817,12 @@
 	    var prevComponentInstance = this._renderedComponent;
 	    var prevRenderedElement = prevComponentInstance._currentElement;
 	    var nextRenderedElement = this._renderValidatedComponent();
+
+	    var debugID = 0;
+	    if (process.env.NODE_ENV !== 'production') {
+	      debugID = this._debugID;
+	    }
+
 	    if (shouldUpdateReactComponent(prevRenderedElement, nextRenderedElement)) {
 	      ReactReconciler.receiveComponent(prevComponentInstance, nextRenderedElement, transaction, this._processChildContext(context));
 	    } else {
@@ -23852,15 +23835,12 @@
 	      );
 	      this._renderedComponent = child;
 
-	      var selfDebugID = 0;
-	      if (process.env.NODE_ENV !== 'production') {
-	        selfDebugID = this._debugID;
-	      }
-	      var nextMarkup = ReactReconciler.mountComponent(child, transaction, this._hostParent, this._hostContainerInfo, this._processChildContext(context), selfDebugID);
+	      var nextMarkup = ReactReconciler.mountComponent(child, transaction, this._hostParent, this._hostContainerInfo, this._processChildContext(context), debugID);
 
 	      if (process.env.NODE_ENV !== 'production') {
-	        if (this._debugID !== 0) {
-	          ReactInstrumentation.debugTool.onSetChildren(this._debugID, child._debugID !== 0 ? [child._debugID] : []);
+	        if (debugID !== 0) {
+	          var childDebugIDs = child._debugID !== 0 ? [child._debugID] : [];
+	          ReactInstrumentation.debugTool.onSetChildren(debugID, childDebugIDs);
 	        }
 	      }
 
@@ -23882,17 +23862,14 @@
 	   */
 	  _renderValidatedComponentWithoutOwnerOrContext: function () {
 	    var inst = this._instance;
+	    var renderedComponent;
 
 	    if (process.env.NODE_ENV !== 'production') {
-	      if (this._debugID !== 0) {
-	        ReactInstrumentation.debugTool.onBeginLifeCycleTimer(this._debugID, 'render');
-	      }
-	    }
-	    var renderedComponent = inst.render();
-	    if (process.env.NODE_ENV !== 'production') {
-	      if (this._debugID !== 0) {
-	        ReactInstrumentation.debugTool.onEndLifeCycleTimer(this._debugID, 'render');
-	      }
+	      renderedComponent = measureLifeCyclePerf(function () {
+	        return inst.render();
+	      }, this._debugID, 'render');
+	    } else {
+	      renderedComponent = inst.render();
 	    }
 
 	    if (process.env.NODE_ENV !== 'production') {
@@ -23943,7 +23920,7 @@
 	    var publicComponentInstance = component.getPublicInstance();
 	    if (process.env.NODE_ENV !== 'production') {
 	      var componentName = component && component.getName ? component.getName() : 'a component';
-	      process.env.NODE_ENV !== 'production' ? warning(publicComponentInstance != null, 'Stateless function components cannot be given refs ' + '(See ref "%s" in %s created by %s). ' + 'Attempts to access this ref will fail.', ref, componentName, this.getName()) : void 0;
+	      process.env.NODE_ENV !== 'production' ? warning(publicComponentInstance != null || component._compositeType !== CompositeTypes.StatelessFunctional, 'Stateless function components cannot be given refs ' + '(See ref "%s" in %s created by %s). ' + 'Attempts to access this ref will fail.', ref, componentName, this.getName()) : void 0;
 	    }
 	    var refs = inst.refs === emptyObject ? inst.refs = {} : inst.refs;
 	    refs[ref] = publicComponentInstance;
@@ -24080,7 +24057,8 @@
 	  if (x === y) {
 	    // Steps 1-5, 7-10
 	    // Steps 6.b-6.e: +0 != -0
-	    return x !== 0 || 1 / x === 1 / y;
+	    // Added the nonzero y check to make Flow happy, but it is redundant
+	    return x !== 0 || y !== 0 || 1 / x === 1 / y;
 	  } else {
 	    // Step 6.a: NaN == NaN
 	    return x !== x && y !== y;
@@ -25134,10 +25112,15 @@
 
 	  var didWarn = {};
 
-	  validateDOMNesting = function (childTag, childInstance, ancestorInfo) {
+	  validateDOMNesting = function (childTag, childText, childInstance, ancestorInfo) {
 	    ancestorInfo = ancestorInfo || emptyAncestorInfo;
 	    var parentInfo = ancestorInfo.current;
 	    var parentTag = parentInfo && parentInfo.tag;
+
+	    if (childText != null) {
+	      process.env.NODE_ENV !== 'production' ? warning(childTag == null, 'validateDOMNesting: when childText is passed, childTag should be null') : void 0;
+	      childTag = '#text';
+	    }
 
 	    var invalidParent = isTagValidWithParent(childTag, parentTag) ? null : parentInfo;
 	    var invalidAncestor = invalidParent ? null : findInvalidAncestorForTag(childTag, ancestorInfo);
@@ -25186,7 +25169,15 @@
 	      didWarn[warnKey] = true;
 
 	      var tagDisplayName = childTag;
-	      if (childTag !== '#text') {
+	      var whitespaceInfo = '';
+	      if (childTag === '#text') {
+	        if (/\S/.test(childText)) {
+	          tagDisplayName = 'Text nodes';
+	        } else {
+	          tagDisplayName = 'Whitespace text nodes';
+	          whitespaceInfo = ' Make sure you don\'t have any extra whitespace between tags on ' + 'each line of your source code.';
+	        }
+	      } else {
 	        tagDisplayName = '<' + childTag + '>';
 	      }
 
@@ -25195,7 +25186,7 @@
 	        if (ancestorTag === 'table' && childTag === 'tr') {
 	          info += ' Add a <tbody> to your code to match the DOM tree generated by ' + 'the browser.';
 	        }
-	        process.env.NODE_ENV !== 'production' ? warning(false, 'validateDOMNesting(...): %s cannot appear as a child of <%s>. ' + 'See %s.%s', tagDisplayName, ancestorTag, ownerInfo, info) : void 0;
+	        process.env.NODE_ENV !== 'production' ? warning(false, 'validateDOMNesting(...): %s cannot appear as a child of <%s>.%s ' + 'See %s.%s', tagDisplayName, ancestorTag, whitespaceInfo, ownerInfo, info) : void 0;
 	      } else {
 	        process.env.NODE_ENV !== 'production' ? warning(false, 'validateDOMNesting(...): %s cannot appear as a descendant of ' + '<%s>. See %s.', tagDisplayName, ancestorTag, ownerInfo) : void 0;
 	      }
@@ -25502,7 +25493,7 @@
 	      if (parentInfo) {
 	        // parentInfo should always be present except for the top-level
 	        // component when server rendering
-	        validateDOMNesting('#text', this, parentInfo);
+	        validateDOMNesting(null, this._stringText, this, parentInfo);
 	      }
 	    }
 
@@ -27095,7 +27086,7 @@
 	      bubbled: keyOf({ onSelect: null }),
 	      captured: keyOf({ onSelectCapture: null })
 	    },
-	    dependencies: [topLevelTypes.topBlur, topLevelTypes.topContextMenu, topLevelTypes.topFocus, topLevelTypes.topKeyDown, topLevelTypes.topMouseDown, topLevelTypes.topMouseUp, topLevelTypes.topSelectionChange]
+	    dependencies: [topLevelTypes.topBlur, topLevelTypes.topContextMenu, topLevelTypes.topFocus, topLevelTypes.topKeyDown, topLevelTypes.topKeyUp, topLevelTypes.topMouseDown, topLevelTypes.topMouseUp, topLevelTypes.topSelectionChange]
 	  }
 	};
 
@@ -29705,7 +29696,7 @@
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	var _code = 'const InputField = Field(React.createClass({\n  render() {\n    return (\n      <div className="form-group">\n        <label className="control-label" htmlFor={this.props.id}>{this.props.label}</label>\n        <input className="form-control" {...this.props.element}/>\n      </div>\n    );\n  }\n}));\n\nexport default React.createClass({\n  handleSubmit(e, form) {\n    this.setState({values: form.values});\n  },\n\n  render() {\n    return (\n      <Form onSubmit={this.handleSubmit}>\n        <h2>Basic Form</h2>\n        <InputField type="text" name="username" id="username" label="Username"/>\n        <InputField type="password" name="password" id="password" label="Password"/>\n        <button className="btn btn-primary" type="submit">Submit</button>\n        <pre className="alert alert-success">{JSON.stringify(this.state || {}, null, 2)}</pre>\n      </Form>\n    );\n  }\n});';
+	var _code = 'const InputField = Field(React.createClass({\n  render() {\n    return (\n      <div className="form-group">\n        <label className="control-label" htmlFor={this.props.id}>{this.props.label}</label>\n        <input className="form-control" {...this.props.element}/>\n      </div>\n    );\n  }\n}));\n\nexport default React.createClass({\n  handleSubmit(e, form) {\n    this.setState({values: form.values});\n  },\n\n  render() {\n    const values = this.state ? this.state.values : {};\n    return (\n      <Form onSubmit={this.handleSubmit}>\n        <h2>Basic Form</h2>\n        <InputField type="text" name="username" id="username" label="Username"/>\n        <InputField type="password" name="password" id="password" label="Password"/>\n        <button className="btn btn-primary" type="submit">Submit</button>\n        <pre className="alert alert-success">{JSON.stringify(values, null, 2)}</pre>\n      </Form>\n    );\n  }\n});';
 
 	exports.default = _react2.default.createClass({
 	  displayName: 'basic-form-display',
@@ -30577,6 +30568,7 @@
 	    this.setState({ values: form.values });
 	  },
 	  render: function render() {
+	    var values = this.state ? this.state.values : {};
 	    return _react2.default.createElement(
 	      _formwood.Form,
 	      { onSubmit: this.handleSubmit },
@@ -30595,7 +30587,7 @@
 	      _react2.default.createElement(
 	        'pre',
 	        { className: 'alert alert-success' },
-	        JSON.stringify(this.state || {}, null, 2)
+	        JSON.stringify(values, null, 2)
 	      )
 	    );
 	  }
@@ -30709,7 +30701,10 @@
 		    return { valid: true };
 		  },
 		  getDefaultProps: function getDefaultProps() {
-		    return { values: {} };
+		    return {
+		      values: {},
+		      messages: {}
+		    };
 		  },
 		  validate: function validate() {
 		    var _this = this;
@@ -30757,7 +30752,8 @@
 		      if (_this2.props.onSubmit) {
 		        _this2.props.onSubmit(e, {
 		          valid: _this2.state.valid,
-		          values: _this2.values()
+		          values: _this2.values(),
+		          invalidFields: _this2.invalidFields
 		        });
 		      }
 		    });
@@ -30831,10 +30827,9 @@
 		      if (child.props) {
 		        childProps.children = _this3.addPropsToChildren(child.props.children, props);
 		        if (child.type.displayName === 'Field') {
-		          var formValues = _this3.props.values[child.props.name] || {};
 		          var values = {
-		            initialValue: formValues.value,
-		            message: formValues.message
+		            initialValue: _this3.props.values[child.props.name],
+		            message: _this3.props.messages[child.props.name]
 		          };
 		          childProps = Object.assign(childProps, values, props);
 		        }
@@ -30862,6 +30857,7 @@
 		  render: function render() {
 		    var formProps = Object.assign({}, this.props);
 		    delete formProps.values;
+		    delete formProps.messages;
 
 		    return _react2.default.createElement(
 		      'form',
@@ -30927,7 +30923,7 @@
 		          var validator = _step.value;
 
 		          var result = validator(this.state.value);
-		          if (result !== true) {
+		          if (result !== undefined) {
 		            this.setState({ valid: false, message: result });
 		            return false;
 		          }
@@ -31052,7 +31048,7 @@
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	var _code = 'export default React.createClass({\n  getInitialState() {\n    return {\n      formValues: {},\n      values: {}\n    }\n  },\n\n  handleSubmit(e, form) {\n    if (form.valid) {\n      this.setState({values: form.values, formValues: {}}, () => {\n        this.setState({\n          formValues: {\n            username: {message: "Username already exists"}\n          }\n        });\n      });\n    }\n  },\n\n  render() {\n    return (\n      <Form onSubmit={this.handleSubmit} values={this.state.formValues}>\n        <h2>Form Validation</h2>\n        <InputField type="text" name="username" label="Username"/>\n        <InputField type="password" name="password" label="Password"/>\n        <button className="btn btn-primary" type="submit">Submit</button>\n        <pre className="alert alert-success">{JSON.stringify(this.state, null, 2)}</pre>\n        <div className="alert alert-info" role="alert">\n          <code>InputField</code> is shown in the <a href="#basic" className="alert-link">Basic Form</a>.\n        </div>\n      </Form>\n    );\n  }\n});';
+	var _code = 'export default React.createClass({\n  getInitialState() {\n    return {\n      messages: {},\n      values: {}\n    }\n  },\n\n  handleSubmit(e, form) {\n    if (form.valid) {\n      this.setState({values: form.values, messages: {}})\n\n      mockPost(form.values).then(() => {\n        this.setState({\n          messages: {username: \'Username already exists\'}\n        });\n      });\n    }\n  },\n\n  render() {\n    return (\n      <Form onSubmit={this.handleSubmit} messages={this.state.messages}>\n        <h2>Form Validation</h2>\n        <InputField type="text" name="username" label="Username" validators={[required()]}/>\n        <InputField type="password" name="password" label="Password"/>\n        <button className="btn btn-primary" type="submit">Submit</button>\n        <pre className="alert alert-success">{JSON.stringify(this.state.values, null, 2)}</pre>\n        <div className="alert alert-info" role="alert">\n          <code>InputField</code> is shown in the <a href="#basic-form" className="alert-link">Basic Form</a>.\n        </div>\n        <div className="alert alert-info" role="alert">\n          <code>Validators</code> are shown in <a href="#field-validation" className="alert-link">Field Validation</a>.\n        </div>\n      </Form>\n    );\n  }\n});';
 
 	exports.default = _react2.default.createClass({
 	  displayName: 'form-validation-display',
@@ -31137,11 +31133,17 @@
 	  }
 	}));
 
+	function mockPost() {
+	  return new Promise(function (resolve) {
+	    setTimeout(resolve, 500);
+	  });
+	}
+
 	exports.default = _react2.default.createClass({
 	  displayName: 'form-validation',
 	  getInitialState: function getInitialState() {
 	    return {
-	      formValues: {},
+	      messages: {},
 	      values: {}
 	    };
 	  },
@@ -31149,11 +31151,11 @@
 	    var _this = this;
 
 	    if (form.valid) {
-	      this.setState({ values: form.values, formValues: {} }, function () {
+	      this.setState({ values: form.values, messages: {} });
+
+	      mockPost(form.values).then(function () {
 	        _this.setState({
-	          formValues: {
-	            username: { message: "Username already exists" }
-	          }
+	          messages: { username: 'Username already exists' }
 	        });
 	      });
 	    }
@@ -31161,13 +31163,13 @@
 	  render: function render() {
 	    return _react2.default.createElement(
 	      _formwood.Form,
-	      { onSubmit: this.handleSubmit, values: this.state.formValues },
+	      { onSubmit: this.handleSubmit, messages: this.state.messages },
 	      _react2.default.createElement(
 	        'h2',
 	        null,
 	        'Form Validation'
 	      ),
-	      _react2.default.createElement(InputField, { type: 'text', name: 'username', label: 'Username' }),
+	      _react2.default.createElement(InputField, { type: 'text', name: 'username', label: 'Username', validators: [(0, _validators.required)()] }),
 	      _react2.default.createElement(InputField, { type: 'password', name: 'password', label: 'Password' }),
 	      _react2.default.createElement(
 	        'button',
@@ -31177,7 +31179,7 @@
 	      _react2.default.createElement(
 	        'pre',
 	        { className: 'alert alert-success' },
-	        JSON.stringify(this.state, null, 2)
+	        JSON.stringify(this.state.values, null, 2)
 	      ),
 	      _react2.default.createElement(
 	        'div',
@@ -31190,8 +31192,24 @@
 	        ' is shown in the ',
 	        _react2.default.createElement(
 	          'a',
-	          { href: '#basic', className: 'alert-link' },
+	          { href: '#basic-form', className: 'alert-link' },
 	          'Basic Form'
+	        ),
+	        '.'
+	      ),
+	      _react2.default.createElement(
+	        'div',
+	        { className: 'alert alert-info', role: 'alert' },
+	        _react2.default.createElement(
+	          'code',
+	          null,
+	          'Validators'
+	        ),
+	        ' are shown in ',
+	        _react2.default.createElement(
+	          'a',
+	          { href: '#field-validation', className: 'alert-link' },
+	          'Field Validation'
 	        ),
 	        '.'
 	      )
@@ -31203,35 +31221,32 @@
 /* 476 */
 /***/ function(module, exports) {
 
-	"use strict";
+	'use strict';
 
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
+	function required() {
+	  return function (value) {
+	    if (Boolean(value) === false) {
+	      return 'Required';
+	    }
+	  };
+	};
+
 	function minLength(length) {
 	  return function (value) {
-	    if (value && value.length >= length) {
-	      return true;
+	    if (!value || value.length < length) {
+	      return 'Must be at least ' + length + ' characters';
 	    }
-	    return "Must be at least " + length + " characters";
 	  };
 	}
 
 	function passwordEquals(password) {
 	  return function (value) {
-	    if (password() === value) {
-	      return true;
+	    if (password() !== value) {
+	      return 'Password does not match';
 	    }
-	    return "Password does not match";
-	  };
-	};
-
-	function required() {
-	  return function (value) {
-	    if (!!value === true) {
-	      return true;
-	    }
-	    return 'Required';
 	  };
 	};
 
@@ -31263,7 +31278,7 @@
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	var _code = 'function required() {\n  return (value) => {\n    if (!!value === true) {\n      return true;\n    }\n    return \'Required\';\n  };\n};\n\nfunction minLength(length) {\n  return (value) => {\n    if (value && value.length >= length) {\n      return true;\n    }\n    return `Must be at least ${length} characters`\n  };\n}\n\nexport default React.createClass({\n  handleSubmit(e, form) {\n    if (form.valid) {\n      this.setState({values: form.values});\n    }\n  },\n\n  render() {\n    return (\n      <Form onSubmit={this.handleSubmit} values={this.state.formValues}>\n        <h2>Field Validation</h2>\n        <InputField type="text" name="username" label="Username" validators={[required(), minLength(3)]}/>\n        <InputField type="password" name="password" label="Password" validators={[required(), minLength(6)]}/>\n        <button className="btn btn-primary" type="submit">Submit</button>\n        <pre className="alert alert-success">{JSON.stringify(this.state, null, 2)}</pre>\n        <div className="alert alert-info" role="alert">\n          <code>InputField</code> is shown in the <a href="#basic-form" className="alert-link"> Basic Form</a>.\n        </div>\n      </Form>\n    );\n  }\n});';
+	var _code = 'function required() {\n  return (value) => {\n    if (Boolean(value) === false) {\n      return \'Required\';\n    }\n  };\n};\n\nfunction minLength(length) {\n  return (value) => {\n    if (!value || value.length < length) {\n      return `Must be at least ${length} characters`\n    }\n  };\n}\n\nexport default React.createClass({\n  handleSubmit(e, form) {\n    if (form.valid) {\n      this.setState({values: form.values});\n    }\n  },\n\n  render() {\n    const values = this.state ? this.state.values : {};\n    return (\n      <Form onSubmit={this.handleSubmit} values={this.state.formValues}>\n        <h2>Field Validation</h2>\n        <InputField type="text" name="username" label="Username" validators={[required(), minLength(3)]}/>\n        <InputField type="password" name="password" label="Password" validators={[required(), minLength(6)]}/>\n        <button className="btn btn-primary" type="submit">Submit</button>\n        <pre className="alert alert-success">{JSON.stringify(values, null, 2)}</pre>\n        <div className="alert alert-info" role="alert">\n          <code>InputField</code> is shown in the <a href="#basic-form" className="alert-link"> Basic Form</a>.\n        </div>\n      </Form>\n    );\n  }\n});';
 
 	exports.default = _react2.default.createClass({
 	  displayName: 'field-validation-display',
@@ -31327,19 +31342,17 @@
 
 	function required() {
 	  return function (value) {
-	    if (!!value === true) {
-	      return true;
+	    if (Boolean(value) === false) {
+	      return 'Required';
 	    }
-	    return 'Required';
 	  };
 	};
 
 	function minLength(length) {
 	  return function (value) {
-	    if (value && value.length >= length) {
-	      return true;
+	    if (!value || value.length < length) {
+	      return 'Must be at least ' + length + ' characters';
 	    }
-	    return 'Must be at least ' + length + ' characters';
 	  };
 	}
 
@@ -31372,6 +31385,7 @@
 	    }
 	  },
 	  render: function render() {
+	    var values = this.state ? this.state.values : {};
 	    return _react2.default.createElement(
 	      _formwood.Form,
 	      { onSubmit: this.handleSubmit },
@@ -31390,7 +31404,7 @@
 	      _react2.default.createElement(
 	        'pre',
 	        { className: 'alert alert-success' },
-	        JSON.stringify(this.state || {}, null, 2)
+	        JSON.stringify(values, null, 2)
 	      ),
 	      _react2.default.createElement(
 	        'div',

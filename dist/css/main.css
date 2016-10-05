@@ -5601,7 +5601,7 @@ nav {
           text-decoration: none;
           border-bottom: 1px solid; }
       nav ul li.current a {
-        color: goldenrod;
+        font-weight: 900;
         padding-left: 3px; }
         nav ul li.current a:before {
           content: "\279C";
@@ -5630,10 +5630,11 @@ main {
 pre {
   border: 0;
   margin-top: 20px;
-  background-color: #ebf7e7; }
+  background-color: #ebf7e7;
+  word-wrap: normal; }
 
 pre[class*="language-"] {
-  font-size: 12px;
+  font-size: 13px;
   padding: 10px 20px;
   background-color: #f2f4f9;
   margin-top: 10px; }

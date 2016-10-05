@@ -1,27 +1,24 @@
+function required() {
+  return (value) => {
+    if (Boolean(value) === false) {
+      return 'Required';
+    }
+  };
+};
+
 function minLength(length) {
   return (value) => {
-    if (value && value.length >= length) {
-      return true;
+    if (!value || value.length < length) {
+      return `Must be at least ${length} characters`
     }
-    return `Must be at least ${length} characters`
   };
 }
 
 function passwordEquals(password) {
   return (value) => {
-    if (password() === value) {
-      return true;
+    if (password() !== value) {
+      return 'Password does not match';
     }
-    return "Password does not match";
-  };
-};
-
-function required() {
-  return (value) => {
-    if (!!value === true) {
-      return true;
-    }
-    return 'Required';
   };
 };
 

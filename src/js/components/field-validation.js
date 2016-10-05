@@ -3,19 +3,17 @@ import {Field, Form} from 'formwood';
 
 function required() {
   return (value) => {
-    if (!!value === true) {
-      return true;
+    if (Boolean(value) === false) {
+      return 'Required';
     }
-    return 'Required';
   };
 };
 
 function minLength(length) {
   return (value) => {
-    if (value && value.length >= length) {
-      return true;
+    if (!value || value.length < length) {
+      return `Must be at least ${length} characters`
     }
-    return `Must be at least ${length} characters`
   };
 }
 
@@ -39,13 +37,14 @@ export default React.createClass({
   },
 
   render() {
+    const values = this.state ? this.state.values : {};
     return (
       <Form onSubmit={this.handleSubmit}>
         <h2>Field Validation</h2>
         <InputField type="text" name="username" label="Username" validators={[required(), minLength(3)]}/>
         <InputField type="password" name="password" label="Password" validators={[required(), minLength(6)]}/>
         <button className="btn btn-primary" type="submit">Submit</button>
-        <pre className="alert alert-success">{JSON.stringify(this.state || {}, null, 2)}</pre>
+        <pre className="alert alert-success">{JSON.stringify(values, null, 2)}</pre>
         <div className="alert alert-info" role="alert">
           <code>InputField</code> is shown in the <a href="#basic-form" className="alert-link"> Basic Form</a>.
         </div>

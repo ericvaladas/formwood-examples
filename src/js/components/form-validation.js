@@ -14,21 +14,27 @@ const InputField = Field(React.createClass({
   }
 }));
 
+function mockPost() {
+  return new Promise((resolve) => {
+    setTimeout(resolve, 500);
+  });
+}
+
 export default React.createClass({
   getInitialState() {
     return {
-      formValues: {},
+      messages: {},
       values: {}
     }
   },
 
   handleSubmit(e, form) {
     if (form.valid) {
-      this.setState({values: form.values, formValues: {}}, () => {
+      this.setState({values: form.values, messages: {}})
+
+      mockPost(form.values).then(() => {
         this.setState({
-          formValues: {
-            username: {message: "Username already exists"}
-          }
+          messages: {username: 'Username already exists'}
         });
       });
     }
@@ -36,14 +42,17 @@ export default React.createClass({
 
   render() {
     return (
-      <Form onSubmit={this.handleSubmit} values={this.state.formValues}>
+      <Form onSubmit={this.handleSubmit} messages={this.state.messages}>
         <h2>Form Validation</h2>
-        <InputField type="text" name="username" label="Username"/>
+        <InputField type="text" name="username" label="Username" validators={[required()]}/>
         <InputField type="password" name="password" label="Password"/>
         <button className="btn btn-primary" type="submit">Submit</button>
-        <pre className="alert alert-success">{JSON.stringify(this.state, null, 2)}</pre>
+        <pre className="alert alert-success">{JSON.stringify(this.state.values, null, 2)}</pre>
         <div className="alert alert-info" role="alert">
-          <code>InputField</code> is shown in the <a href="#basic" className="alert-link">Basic Form</a>.
+          <code>InputField</code> is shown in the <a href="#basic-form" className="alert-link">Basic Form</a>.
+        </div>
+        <div className="alert alert-info" role="alert">
+          <code>Validators</code> are shown in <a href="#field-validation" className="alert-link">Field Validation</a>.
         </div>
       </Form>
     );
