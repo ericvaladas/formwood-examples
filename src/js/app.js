@@ -5,6 +5,7 @@ import {Scrollspy} from 'react-scrollspy';
 import BasicForm from './components/basic-form-display';
 import FormValidation from './components/form-validation-display';
 import FieldValidation from './components/field-validation-display';
+import InitialValues from './components/initial-values-display';
 import AdvancedForm from './components/advanced-form-display';
 
 
@@ -16,7 +17,8 @@ const App = React.createClass({
   examples: [
     'Basic Form',
     'Field Validation',
-    'Form Validation'
+    'Form Validation',
+    'Initial Values'
   ],
 
   exampleLinks() {
@@ -48,6 +50,7 @@ const App = React.createClass({
           <BasicForm id={examples[0]}/>
           <FieldValidation id={examples[1]}/>
           <FormValidation id={examples[2]}/>
+          <InitialValues id={examples[3]}/>
         </main>
       </div>
     );

@@ -78,7 +78,11 @@
 
 	var _fieldValidationDisplay2 = _interopRequireDefault(_fieldValidationDisplay);
 
-	var _advancedFormDisplay = __webpack_require__(479);
+	var _initialValuesDisplay = __webpack_require__(479);
+
+	var _initialValuesDisplay2 = _interopRequireDefault(_initialValuesDisplay);
+
+	var _advancedFormDisplay = __webpack_require__(481);
 
 	var _advancedFormDisplay2 = _interopRequireDefault(_advancedFormDisplay);
 
@@ -91,7 +95,7 @@
 	  },
 
 
-	  examples: ['Basic Form', 'Field Validation', 'Form Validation'],
+	  examples: ['Basic Form', 'Field Validation', 'Form Validation', 'Initial Values'],
 
 	  exampleLinks: function exampleLinks() {
 	    var _this = this;
@@ -143,7 +147,8 @@
 	        null,
 	        _react2.default.createElement(_basicFormDisplay2.default, { id: examples[0] }),
 	        _react2.default.createElement(_fieldValidationDisplay2.default, { id: examples[1] }),
-	        _react2.default.createElement(_formValidationDisplay2.default, { id: examples[2] })
+	        _react2.default.createElement(_formValidationDisplay2.default, { id: examples[2] }),
+	        _react2.default.createElement(_initialValuesDisplay2.default, { id: examples[3] })
 	      )
 	    );
 	  }
@@ -30774,7 +30779,7 @@
 		        var field = _step2.value;
 
 		        if (field.state.value && field.state.checked) {
-		          fieldValues.push(field.state.value);
+		          fieldValues.push(field.props.value || field.state.value);
 		        }
 		      }
 		    } catch (err) {
@@ -31449,7 +31454,227 @@
 
 	var _prismjs2 = _interopRequireDefault(_prismjs);
 
-	var _advancedForm = __webpack_require__(480);
+	var _initialValues = __webpack_require__(480);
+
+	var _initialValues2 = _interopRequireDefault(_initialValues);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	var _code = 'const SelectField = Field(React.createClass({\n  render() {\n    return (\n      <div className="form-group">\n        <label>{this.props.label}</label>\n        <select {...this.props.element} className="form-control">\n          {this.props.children}\n        </select>\n      </div>\n    );\n  }\n}));\n\nconst CheckboxField = Field(React.createClass({\n  render() {\n    return (\n      <div className="form-group">\n        <div className="checkbox">\n          <label>\n            <input type="checkbox" {...this.props.element}/> {this.props.label}\n          </label>\n        </div>\n      </div>\n    );\n  }\n}));\n\nexport default React.createClass({\n  handleSubmit(e, form) {\n    this.setState({values: form.values});\n  },\n\n  render() {\n    const values = this.state ? this.state.values : {};\n    const initialValues = {\n      city: \'Toronto\',\n      color: [\'green\', \'blue\'],\n      fruit: \'Papaya\'\n    };\n\n    return (\n      <Form onSubmit={this.handleSubmit} values={initialValues}>\n        <h2>Initial Values</h2>\n        <InputField type="text" name="city" label="City"/>\n        <CheckboxField type="checkbox" name="color" value="red" label="Red"/>\n        <CheckboxField type="checkbox" name="color" value="green" label="Green"/>\n        <CheckboxField type="checkbox" name="color" value="blue" label="Blue"/>\n        <SelectField name="fruit" label="Fruit">\n          <option>Banana</option>\n          <option>Mango</option>\n          <option>Papaya</option>\n        </SelectField>\n        <button className="btn btn-primary" type="submit">Submit</button>\n        <pre className="alert alert-success">{JSON.stringify(values, null, 2)}</pre>\n        <ul className="list-unstyled">\n          <li><code>InputField</code> is shown in the <a href="#basic-form" className="alert-link">Basic Form</a></li>\n        </ul>\n      </Form>\n    );\n  }\n});';
+
+	exports.default = _react2.default.createClass({
+	  displayName: 'initial-values-display',
+	  code: function code() {
+	    return {
+	      '__html': _prismjs2.default.highlight(_code, _prismjs2.default.languages.javascript)
+	    };
+	  },
+	  render: function render() {
+	    return _react2.default.createElement(
+	      'section',
+	      this.props,
+	      _react2.default.createElement(
+	        'div',
+	        { className: 'example-form' },
+	        _react2.default.createElement(
+	          'div',
+	          { className: 'container-fluid' },
+	          _react2.default.createElement(
+	            'div',
+	            { className: 'row' },
+	            _react2.default.createElement(
+	              'div',
+	              { className: 'col-xs-12' },
+	              _react2.default.createElement(_initialValues2.default, null)
+	            )
+	          )
+	        )
+	      ),
+	      _react2.default.createElement(
+	        'div',
+	        { className: 'example-code' },
+	        _react2.default.createElement('pre', {
+	          className: 'language-javascript',
+	          dangerouslySetInnerHTML: this.code()
+	        })
+	      )
+	    );
+	  }
+	});
+
+/***/ },
+/* 480 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
+	var _react = __webpack_require__(299);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _formwood = __webpack_require__(473);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	var InputField = (0, _formwood.Field)(_react2.default.createClass({
+	  displayName: 'InputField',
+	  render: function render() {
+	    return _react2.default.createElement(
+	      'div',
+	      { className: 'form-group' },
+	      _react2.default.createElement(
+	        'label',
+	        { className: 'control-label', htmlFor: this.props.id },
+	        this.props.label
+	      ),
+	      _react2.default.createElement('input', _extends({ className: 'form-control' }, this.props.element))
+	    );
+	  }
+	}));
+
+	var SelectField = (0, _formwood.Field)(_react2.default.createClass({
+	  displayName: 'SelectField',
+	  render: function render() {
+	    return _react2.default.createElement(
+	      'div',
+	      { className: 'form-group' },
+	      _react2.default.createElement(
+	        'label',
+	        null,
+	        this.props.label
+	      ),
+	      _react2.default.createElement(
+	        'select',
+	        _extends({}, this.props.element, { className: 'form-control' }),
+	        this.props.children
+	      )
+	    );
+	  }
+	}));
+
+	var CheckboxField = (0, _formwood.Field)(_react2.default.createClass({
+	  displayName: 'CheckboxField',
+	  render: function render() {
+	    return _react2.default.createElement(
+	      'div',
+	      { className: 'form-group' },
+	      _react2.default.createElement(
+	        'div',
+	        { className: 'checkbox' },
+	        _react2.default.createElement(
+	          'label',
+	          null,
+	          _react2.default.createElement('input', _extends({ type: 'checkbox' }, this.props.element)),
+	          ' ',
+	          this.props.label
+	        )
+	      )
+	    );
+	  }
+	}));
+
+	exports.default = _react2.default.createClass({
+	  displayName: 'initial-values',
+	  handleSubmit: function handleSubmit(e, form) {
+	    this.setState({ values: form.values });
+	  },
+	  render: function render() {
+	    var values = this.state ? this.state.values : {};
+	    var initialValues = {
+	      city: 'Toronto',
+	      color: ['green', 'blue'],
+	      fruit: 'Papaya'
+	    };
+
+	    return _react2.default.createElement(
+	      _formwood.Form,
+	      { onSubmit: this.handleSubmit, values: initialValues },
+	      _react2.default.createElement(
+	        'h2',
+	        null,
+	        'Initial Values'
+	      ),
+	      _react2.default.createElement(InputField, { type: 'text', name: 'city', label: 'City' }),
+	      _react2.default.createElement(CheckboxField, { type: 'checkbox', name: 'color', value: 'red', label: 'Red' }),
+	      _react2.default.createElement(CheckboxField, { type: 'checkbox', name: 'color', value: 'green', label: 'Green' }),
+	      _react2.default.createElement(CheckboxField, { type: 'checkbox', name: 'color', value: 'blue', label: 'Blue' }),
+	      _react2.default.createElement(
+	        SelectField,
+	        { name: 'fruit', label: 'Fruit' },
+	        _react2.default.createElement(
+	          'option',
+	          null,
+	          'Banana'
+	        ),
+	        _react2.default.createElement(
+	          'option',
+	          null,
+	          'Mango'
+	        ),
+	        _react2.default.createElement(
+	          'option',
+	          null,
+	          'Papaya'
+	        )
+	      ),
+	      _react2.default.createElement(
+	        'button',
+	        { className: 'btn btn-primary', type: 'submit' },
+	        'Submit'
+	      ),
+	      _react2.default.createElement(
+	        'pre',
+	        { className: 'alert alert-success' },
+	        JSON.stringify(values, null, 2)
+	      ),
+	      _react2.default.createElement(
+	        'ul',
+	        { className: 'list-unstyled' },
+	        _react2.default.createElement(
+	          'li',
+	          null,
+	          _react2.default.createElement(
+	            'code',
+	            null,
+	            'InputField'
+	          ),
+	          ' is shown in the ',
+	          _react2.default.createElement(
+	            'a',
+	            { href: '#basic-form', className: 'alert-link' },
+	            'Basic Form'
+	          )
+	        )
+	      )
+	    );
+	  }
+	});
+
+/***/ },
+/* 481 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _react = __webpack_require__(299);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _prismjs = __webpack_require__(471);
+
+	var _prismjs2 = _interopRequireDefault(_prismjs);
+
+	var _advancedForm = __webpack_require__(482);
 
 	var _advancedForm2 = _interopRequireDefault(_advancedForm);
 
@@ -31498,7 +31723,7 @@
 	});
 
 /***/ },
-/* 480 */
+/* 482 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
