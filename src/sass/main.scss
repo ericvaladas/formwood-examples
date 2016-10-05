@@ -36,7 +36,7 @@ nav {
 
       &.current {
         a {
-          color: goldenrod;
+          font-weight: 900;
           padding-left: 3px;
 
           &:before {
@@ -76,10 +76,11 @@ pre {
   border: 0;
   margin-top: 20px;
   background-color: #ebf7e7;
+  word-wrap: normal;
 }
 
 pre[class*="language-"] {
-  font-size: 12px;
+  font-size: 13px;
   padding: 10px 20px;
   background-color: #f2f4f9;
   margin-top: 10px;
