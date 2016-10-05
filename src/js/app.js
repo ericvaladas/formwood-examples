@@ -16,8 +16,7 @@ const App = React.createClass({
   examples: [
     'Basic Form',
     'Field Validation',
-    'Form Validation',
-    'Advanced Validation'
+    'Form Validation'
   ],
 
   exampleLinks() {
@@ -49,7 +48,6 @@ const App = React.createClass({
           <BasicForm id={examples[0]}/>
           <FieldValidation id={examples[1]}/>
           <FormValidation id={examples[2]}/>
-          <AdvancedForm id={examples[3]}/>
         </main>
       </div>
     );
