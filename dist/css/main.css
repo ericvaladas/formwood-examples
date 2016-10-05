@@ -5651,3 +5651,7 @@ label {
 .alert code {
   color: inherit;
   background-color: inherit; }
+
+.list-unstyled li {
+  margin-bottom: 8px;
+  font-size: 13px; }

@@ -32,12 +32,10 @@ const code = (
         <InputField type="password" name="password" label="Password"/>
         <button className="btn btn-primary" type="submit">Submit</button>
         <pre className="alert alert-success">{JSON.stringify(this.state.values, null, 2)}</pre>
-        <div className="alert alert-info" role="alert">
-          <code>InputField</code> is shown in the <a href="#basic-form" className="alert-link">Basic Form</a>.
-        </div>
-        <div className="alert alert-info" role="alert">
-          <code>Validators</code> are shown in <a href="#field-validation" className="alert-link">Field Validation</a>.
-        </div>
+        <ul className="list-unstyled">
+          <li><code>InputField</code> is shown in the <a href="#basic-form" className="alert-link">Basic Form</a></li>
+          <li><code>Validators</code> are shown in <a href="#field-validation" className="alert-link">Field Validation</a></li>
+        </ul>
       </Form>
     );
   }

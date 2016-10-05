@@ -45,9 +45,9 @@ export default React.createClass({
         <InputField type="password" name="password" label="Password" validators={[required(), minLength(6)]}/>
         <button className="btn btn-primary" type="submit">Submit</button>
         <pre className="alert alert-success">{JSON.stringify(values, null, 2)}</pre>
-        <div className="alert alert-info" role="alert">
-          <code>InputField</code> is shown in the <a href="#basic-form" className="alert-link"> Basic Form</a>.
-        </div>
+        <ul className="list-unstyled">
+          <li><code>InputField</code> is shown in the <a href="#basic-form" className="alert-link">Basic Form</a></li>
+        </ul>
       </Form>
     );
   }

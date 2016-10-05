@@ -31048,7 +31048,7 @@
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	var _code = 'export default React.createClass({\n  getInitialState() {\n    return {\n      messages: {},\n      values: {}\n    }\n  },\n\n  handleSubmit(e, form) {\n    if (form.valid) {\n      this.setState({values: form.values, messages: {}})\n\n      mockPost(form.values).then(() => {\n        this.setState({\n          messages: {username: \'Username already exists\'}\n        });\n      });\n    }\n  },\n\n  render() {\n    return (\n      <Form onSubmit={this.handleSubmit} messages={this.state.messages}>\n        <h2>Form Validation</h2>\n        <InputField type="text" name="username" label="Username" validators={[required()]}/>\n        <InputField type="password" name="password" label="Password"/>\n        <button className="btn btn-primary" type="submit">Submit</button>\n        <pre className="alert alert-success">{JSON.stringify(this.state.values, null, 2)}</pre>\n        <div className="alert alert-info" role="alert">\n          <code>InputField</code> is shown in the <a href="#basic-form" className="alert-link">Basic Form</a>.\n        </div>\n        <div className="alert alert-info" role="alert">\n          <code>Validators</code> are shown in <a href="#field-validation" className="alert-link">Field Validation</a>.\n        </div>\n      </Form>\n    );\n  }\n});';
+	var _code = 'export default React.createClass({\n  getInitialState() {\n    return {\n      messages: {},\n      values: {}\n    }\n  },\n\n  handleSubmit(e, form) {\n    if (form.valid) {\n      this.setState({values: form.values, messages: {}})\n\n      mockPost(form.values).then(() => {\n        this.setState({\n          messages: {username: \'Username already exists\'}\n        });\n      });\n    }\n  },\n\n  render() {\n    return (\n      <Form onSubmit={this.handleSubmit} messages={this.state.messages}>\n        <h2>Form Validation</h2>\n        <InputField type="text" name="username" label="Username" validators={[required()]}/>\n        <InputField type="password" name="password" label="Password"/>\n        <button className="btn btn-primary" type="submit">Submit</button>\n        <pre className="alert alert-success">{JSON.stringify(this.state.values, null, 2)}</pre>\n        <ul className="list-unstyled">\n          <li><code>InputField</code> is shown in the <a href="#basic-form" className="alert-link">Basic Form</a></li>\n          <li><code>Validators</code> are shown in <a href="#field-validation" className="alert-link">Field Validation</a></li>\n        </ul>\n      </Form>\n    );\n  }\n});';
 
 	exports.default = _react2.default.createClass({
 	  displayName: 'form-validation-display',
@@ -31182,36 +31182,38 @@
 	        JSON.stringify(this.state.values, null, 2)
 	      ),
 	      _react2.default.createElement(
-	        'div',
-	        { className: 'alert alert-info', role: 'alert' },
+	        'ul',
+	        { className: 'list-unstyled' },
 	        _react2.default.createElement(
-	          'code',
+	          'li',
 	          null,
-	          'InputField'
+	          _react2.default.createElement(
+	            'code',
+	            null,
+	            'InputField'
+	          ),
+	          ' is shown in the ',
+	          _react2.default.createElement(
+	            'a',
+	            { href: '#basic-form', className: 'alert-link' },
+	            'Basic Form'
+	          )
 	        ),
-	        ' is shown in the ',
 	        _react2.default.createElement(
-	          'a',
-	          { href: '#basic-form', className: 'alert-link' },
-	          'Basic Form'
-	        ),
-	        '.'
-	      ),
-	      _react2.default.createElement(
-	        'div',
-	        { className: 'alert alert-info', role: 'alert' },
-	        _react2.default.createElement(
-	          'code',
+	          'li',
 	          null,
-	          'Validators'
-	        ),
-	        ' are shown in ',
-	        _react2.default.createElement(
-	          'a',
-	          { href: '#field-validation', className: 'alert-link' },
-	          'Field Validation'
-	        ),
-	        '.'
+	          _react2.default.createElement(
+	            'code',
+	            null,
+	            'Validators'
+	          ),
+	          ' are shown in ',
+	          _react2.default.createElement(
+	            'a',
+	            { href: '#field-validation', className: 'alert-link' },
+	            'Field Validation'
+	          )
+	        )
 	      )
 	    );
 	  }
@@ -31278,7 +31280,7 @@
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	var _code = 'function required() {\n  return (value) => {\n    if (Boolean(value) === false) {\n      return \'Required\';\n    }\n  };\n};\n\nfunction minLength(length) {\n  return (value) => {\n    if (!value || value.length < length) {\n      return `Must be at least ${length} characters`\n    }\n  };\n}\n\nexport default React.createClass({\n  handleSubmit(e, form) {\n    if (form.valid) {\n      this.setState({values: form.values});\n    }\n  },\n\n  render() {\n    const values = this.state ? this.state.values : {};\n    return (\n      <Form onSubmit={this.handleSubmit} values={this.state.formValues}>\n        <h2>Field Validation</h2>\n        <InputField type="text" name="username" label="Username" validators={[required(), minLength(3)]}/>\n        <InputField type="password" name="password" label="Password" validators={[required(), minLength(6)]}/>\n        <button className="btn btn-primary" type="submit">Submit</button>\n        <pre className="alert alert-success">{JSON.stringify(values, null, 2)}</pre>\n        <div className="alert alert-info" role="alert">\n          <code>InputField</code> is shown in the <a href="#basic-form" className="alert-link"> Basic Form</a>.\n        </div>\n      </Form>\n    );\n  }\n});';
+	var _code = 'function required() {\n  return (value) => {\n    if (Boolean(value) === false) {\n      return \'Required\';\n    }\n  };\n};\n\nfunction minLength(length) {\n  return (value) => {\n    if (!value || value.length < length) {\n      return `Must be at least ${length} characters`\n    }\n  };\n}\n\nexport default React.createClass({\n  handleSubmit(e, form) {\n    if (form.valid) {\n      this.setState({values: form.values});\n    }\n  },\n\n  render() {\n    const values = this.state ? this.state.values : {};\n    return (\n      <Form onSubmit={this.handleSubmit} values={this.state.formValues}>\n        <h2>Field Validation</h2>\n        <InputField type="text" name="username" label="Username" validators={[required(), minLength(3)]}/>\n        <InputField type="password" name="password" label="Password" validators={[required(), minLength(6)]}/>\n        <button className="btn btn-primary" type="submit">Submit</button>\n        <pre className="alert alert-success">{JSON.stringify(values, null, 2)}</pre>\n        <ul className="list-unstyled">\n          <li><code>InputField</code> is shown in the <a href="#basic-form" className="alert-link">Basic Form</a></li>\n        </ul>\n      </Form>\n    );\n  }\n});';
 
 	exports.default = _react2.default.createClass({
 	  displayName: 'field-validation-display',
@@ -31407,20 +31409,23 @@
 	        JSON.stringify(values, null, 2)
 	      ),
 	      _react2.default.createElement(
-	        'div',
-	        { className: 'alert alert-info', role: 'alert' },
+	        'ul',
+	        { className: 'list-unstyled' },
 	        _react2.default.createElement(
-	          'code',
+	          'li',
 	          null,
-	          'InputField'
-	        ),
-	        ' is shown in the ',
-	        _react2.default.createElement(
-	          'a',
-	          { href: '#basic-form', className: 'alert-link' },
-	          ' Basic Form'
-	        ),
-	        '.'
+	          _react2.default.createElement(
+	            'code',
+	            null,
+	            'InputField'
+	          ),
+	          ' is shown in the ',
+	          _react2.default.createElement(
+	            'a',
+	            { href: '#basic-form', className: 'alert-link' },
+	            'Basic Form'
+	          )
+	        )
 	      )
 	    );
 	  }
