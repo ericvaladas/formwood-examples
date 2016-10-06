@@ -2,7 +2,7 @@ import React from 'react';
 import {Field, Form} from 'formwood';
 
 
-const InputField = Field(React.createClass({
+const InputField = Field(React.createClass({ // fold-start
   render() {
     return (
       <div className="form-group">
@@ -10,10 +10,10 @@ const InputField = Field(React.createClass({
         <input className="form-control" {...this.props.element}/>
       </div>
     );
-  }
+  } // fold-end
 }));
 
-const SelectField = Field(React.createClass({
+const SelectField = Field(React.createClass({ // fold-start
   render() {
     return (
       <div className="form-group">
@@ -23,10 +23,10 @@ const SelectField = Field(React.createClass({
         </select>
       </div>
     );
-  }
+  } // fold-end
 }));
 
-const CheckboxField = Field(React.createClass({
+const CheckboxField = Field(React.createClass({ // fold-start
   render() {
     return (
       <div className="form-group">
@@ -37,7 +37,7 @@ const CheckboxField = Field(React.createClass({
         </div>
       </div>
     );
-  }
+  } // fold-end
 }));
 
 export default React.createClass({
@@ -67,9 +67,6 @@ export default React.createClass({
         </SelectField>
         <button className="btn btn-primary" type="submit">Submit</button>
         <pre className="alert alert-success">{JSON.stringify(values, null, 2)}</pre>
-        <ul className="list-unstyled">
-          <li><code>InputField</code> is shown in the <a href="#basic-form" className="alert-link">Basic Form</a></li>
-        </ul>
       </Form>
     );
   }

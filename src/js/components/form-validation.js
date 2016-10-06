@@ -2,7 +2,7 @@ import React from 'react';
 import {Field, Form} from 'formwood';
 import {minLength, required} from '../validators';
 
-const InputField = Field(React.createClass({
+const InputField = Field(React.createClass({ // fold-start
   render() {
     return (
       <div className={`form-group ${this.props.message ? 'has-error' : ''}`}>
@@ -11,13 +11,13 @@ const InputField = Field(React.createClass({
         <span className="help-block">{this.props.message}</span>
       </div>
     );
-  }
+  } // fold-end
 }));
 
-function mockPost() {
+function mockPost() { // fold-start
   return new Promise((resolve) => {
     setTimeout(resolve, 500);
-  });
+  }); // fold-end
 }
 
 export default React.createClass({
@@ -49,7 +49,6 @@ export default React.createClass({
         <button className="btn btn-primary" type="submit">Submit</button>
         <pre className="alert alert-success">{JSON.stringify(this.state.values, null, 2)}</pre>
         <ul className="list-unstyled">
-          <li><code>InputField</code> is shown in the <a href="#basic-form" className="alert-link">Basic Form</a></li>
           <li><code>Validators</code> are shown in <a href="#field-validation" className="alert-link">Field Validation</a></li>
         </ul>
       </Form>

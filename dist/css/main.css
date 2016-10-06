@@ -5655,3 +5655,28 @@ label {
 .list-unstyled li {
   margin-bottom: 8px;
   font-size: 13px; }
+
+.folded {
+  position: relative;
+  display: block;
+  height: 0;
+  width: 34px;
+  overflow: hidden;
+  padding-top: 20px;
+  margin-bottom: -17px;
+  margin-left: 3px; }
+  .folded:before {
+    content: '\b7\b7\b7';
+    position: absolute;
+    display: block;
+    background-color: rgba(113, 150, 208, 0.17);
+    color: rgba(0, 0, 0, 0.6);
+    border-radius: 4px;
+    padding: 3px 5px 1px 5px;
+    line-height: 1;
+    top: 0;
+    font-size: 14px;
+    cursor: pointer; }
+  .folded:hover:before {
+    background-color: rgba(60, 140, 198, 0.27);
+    color: black; }
