@@ -2,11 +2,15 @@ import 'babel-polyfill';
 import React from 'react';
 import ReactDom from 'react-dom';
 import {Scrollspy} from 'react-scrollspy';
-import BasicForm from './components/basic-form-display';
-import FormValidation from './components/form-validation-display';
-import FieldValidation from './components/field-validation-display';
-import InitialValues from './components/initial-values-display';
-import AdvancedForm from './components/advanced-form-display';
+import Example from './components/example';
+import BasicForm from './components/basic-form';
+import BasicFormCode from '!raw!./components/basic-form';
+import FormValidation from './components/form-validation';
+import FormValidationCode from '!raw!./components/form-validation';
+import FieldValidation from './components/field-validation';
+import FieldValidationCode from '!raw!./components/field-validation';
+import InitialValues from './components/initial-values';
+import InitialValuesCode from '!raw!./components/initial-values';
 
 
 const App = React.createClass({
@@ -47,10 +51,10 @@ const App = React.createClass({
           </nav>
         </div>
         <main>
-          <BasicForm id={examples[0]}/>
-          <FieldValidation id={examples[1]}/>
-          <FormValidation id={examples[2]}/>
-          <InitialValues id={examples[3]}/>
+          <Example id={examples[0]} component={<BasicForm/>} code={BasicFormCode}/>
+          <Example id={examples[1]} component={<FieldValidation/>} code={FieldValidationCode}/>
+          <Example id={examples[2]} component={<FormValidation/>} code={FormValidationCode}/>
+          <Example id={examples[3]} component={<InitialValues/>} code={InitialValuesCode}/>
         </main>
       </div>
     );

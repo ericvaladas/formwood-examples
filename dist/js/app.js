@@ -66,25 +66,41 @@
 
 	var _reactScrollspy = __webpack_require__(469);
 
-	var _basicFormDisplay = __webpack_require__(470);
+	var _example = __webpack_require__(470);
 
-	var _basicFormDisplay2 = _interopRequireDefault(_basicFormDisplay);
+	var _example2 = _interopRequireDefault(_example);
 
-	var _formValidationDisplay = __webpack_require__(474);
+	var _basicForm = __webpack_require__(472);
 
-	var _formValidationDisplay2 = _interopRequireDefault(_formValidationDisplay);
+	var _basicForm2 = _interopRequireDefault(_basicForm);
 
-	var _fieldValidationDisplay = __webpack_require__(477);
+	var _basicForm3 = __webpack_require__(474);
 
-	var _fieldValidationDisplay2 = _interopRequireDefault(_fieldValidationDisplay);
+	var _basicForm4 = _interopRequireDefault(_basicForm3);
 
-	var _initialValuesDisplay = __webpack_require__(479);
+	var _formValidation = __webpack_require__(475);
 
-	var _initialValuesDisplay2 = _interopRequireDefault(_initialValuesDisplay);
+	var _formValidation2 = _interopRequireDefault(_formValidation);
 
-	var _advancedFormDisplay = __webpack_require__(481);
+	var _formValidation3 = __webpack_require__(477);
 
-	var _advancedFormDisplay2 = _interopRequireDefault(_advancedFormDisplay);
+	var _formValidation4 = _interopRequireDefault(_formValidation3);
+
+	var _fieldValidation = __webpack_require__(478);
+
+	var _fieldValidation2 = _interopRequireDefault(_fieldValidation);
+
+	var _fieldValidation3 = __webpack_require__(479);
+
+	var _fieldValidation4 = _interopRequireDefault(_fieldValidation3);
+
+	var _initialValues = __webpack_require__(480);
+
+	var _initialValues2 = _interopRequireDefault(_initialValues);
+
+	var _initialValues3 = __webpack_require__(481);
+
+	var _initialValues4 = _interopRequireDefault(_initialValues3);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -145,10 +161,10 @@
 	      _react2.default.createElement(
 	        'main',
 	        null,
-	        _react2.default.createElement(_basicFormDisplay2.default, { id: examples[0] }),
-	        _react2.default.createElement(_fieldValidationDisplay2.default, { id: examples[1] }),
-	        _react2.default.createElement(_formValidationDisplay2.default, { id: examples[2] }),
-	        _react2.default.createElement(_initialValuesDisplay2.default, { id: examples[3] })
+	        _react2.default.createElement(_example2.default, { id: examples[0], component: _react2.default.createElement(_basicForm2.default, null), code: _basicForm4.default }),
+	        _react2.default.createElement(_example2.default, { id: examples[1], component: _react2.default.createElement(_fieldValidation2.default, null), code: _fieldValidation4.default }),
+	        _react2.default.createElement(_example2.default, { id: examples[2], component: _react2.default.createElement(_formValidation2.default, null), code: _formValidation4.default }),
+	        _react2.default.createElement(_example2.default, { id: examples[3], component: _react2.default.createElement(_initialValues2.default, null), code: _initialValues4.default })
 	      )
 	    );
 	  }
@@ -29695,25 +29711,46 @@
 
 	var _prismjs2 = _interopRequireDefault(_prismjs);
 
-	var _basicForm = __webpack_require__(472);
-
-	var _basicForm2 = _interopRequireDefault(_basicForm);
-
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	var _code = 'const InputField = Field(React.createClass({\n  render() {\n    return (\n      <div className="form-group">\n        <label className="control-label" htmlFor={this.props.id}>{this.props.label}</label>\n        <input className="form-control" {...this.props.element}/>\n      </div>\n    );\n  }\n}));\n\nexport default React.createClass({\n  handleSubmit(e, form) {\n    this.setState({values: form.values});\n  },\n\n  render() {\n    const values = this.state ? this.state.values : {};\n    return (\n      <Form onSubmit={this.handleSubmit}>\n        <h2>Basic Form</h2>\n        <InputField type="text" name="username" id="username" label="Username"/>\n        <InputField type="password" name="password" id="password" label="Password"/>\n        <button className="btn btn-primary" type="submit">Submit</button>\n        <pre className="alert alert-success">{JSON.stringify(values, null, 2)}</pre>\n      </Form>\n    );\n  }\n});';
+	var FOLD_START = '// fold-start';
+	var FOLD_END = '// fold-end';
 
 	exports.default = _react2.default.createClass({
-	  displayName: 'basic-form-display',
+	  displayName: 'example',
 	  code: function code() {
 	    return {
-	      '__html': _prismjs2.default.highlight(_code, _prismjs2.default.languages.javascript)
+	      '__html': _prismjs2.default.highlight(this.props.code, _prismjs2.default.languages.javascript)
 	    };
+	  },
+	  foldCode: function foldCode() {
+	    var comments = document.getElementsByClassName('comment');
+	    Array.from(comments).forEach(function (comment) {
+	      if (comment.textContent === FOLD_START) {
+	        var folded = '';
+	        var node = comment.nextSibling;
+	        while (node && node.textContent !== FOLD_END) {
+	          folded += node.outerHTML || node.textContent;
+	          var discard = node;
+	          node = node.nextSibling;
+	          discard.remove();
+	        }
+	        node.remove();
+	        comment.innerHTML = folded;
+	        comment.className = 'folded';
+	        comment.addEventListener('click', function () {
+	          comment.className = '';
+	        });
+	      }
+	    });
+	  },
+	  componentDidMount: function componentDidMount() {
+	    this.foldCode();
 	  },
 	  render: function render() {
 	    return _react2.default.createElement(
 	      'section',
-	      this.props,
+	      { id: this.props.id },
 	      _react2.default.createElement(
 	        'div',
 	        { className: 'example-form' },
@@ -29726,7 +29763,7 @@
 	            _react2.default.createElement(
 	              'div',
 	              { className: 'col-xs-12' },
-	              _react2.default.createElement(_basicForm2.default, null)
+	              this.props.component
 	            )
 	          )
 	        )
@@ -31031,69 +31068,9 @@
 
 /***/ },
 /* 474 */
-/***/ function(module, exports, __webpack_require__) {
+/***/ function(module, exports) {
 
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-
-	var _react = __webpack_require__(299);
-
-	var _react2 = _interopRequireDefault(_react);
-
-	var _prismjs = __webpack_require__(471);
-
-	var _prismjs2 = _interopRequireDefault(_prismjs);
-
-	var _formValidation = __webpack_require__(475);
-
-	var _formValidation2 = _interopRequireDefault(_formValidation);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	var _code = 'export default React.createClass({\n  getInitialState() {\n    return {\n      messages: {},\n      values: {}\n    }\n  },\n\n  handleSubmit(e, form) {\n    if (form.valid) {\n      this.setState({values: form.values, messages: {}})\n\n      mockPost(form.values).then(() => {\n        this.setState({\n          messages: {username: \'Username already exists\'}\n        });\n      });\n    }\n  },\n\n  render() {\n    return (\n      <Form onSubmit={this.handleSubmit} messages={this.state.messages}>\n        <h2>Form Validation</h2>\n        <InputField type="text" name="username" label="Username" validators={[required()]}/>\n        <InputField type="password" name="password" label="Password"/>\n        <button className="btn btn-primary" type="submit">Submit</button>\n        <pre className="alert alert-success">{JSON.stringify(this.state.values, null, 2)}</pre>\n        <ul className="list-unstyled">\n          <li><code>InputField</code> is shown in the <a href="#basic-form" className="alert-link">Basic Form</a></li>\n          <li><code>Validators</code> are shown in <a href="#field-validation" className="alert-link">Field Validation</a></li>\n        </ul>\n      </Form>\n    );\n  }\n});';
-
-	exports.default = _react2.default.createClass({
-	  displayName: 'form-validation-display',
-	  code: function code() {
-	    return {
-	      '__html': _prismjs2.default.highlight(_code, _prismjs2.default.languages.javascript)
-	    };
-	  },
-	  render: function render() {
-	    return _react2.default.createElement(
-	      'section',
-	      this.props,
-	      _react2.default.createElement(
-	        'div',
-	        { className: 'example-form' },
-	        _react2.default.createElement(
-	          'div',
-	          { className: 'container-fluid' },
-	          _react2.default.createElement(
-	            'div',
-	            { className: 'row' },
-	            _react2.default.createElement(
-	              'div',
-	              { className: 'col-xs-12' },
-	              _react2.default.createElement(_formValidation2.default, null)
-	            )
-	          )
-	        )
-	      ),
-	      _react2.default.createElement(
-	        'div',
-	        { className: 'example-code' },
-	        _react2.default.createElement('pre', {
-	          className: 'language-javascript',
-	          dangerouslySetInnerHTML: this.code()
-	        })
-	      )
-	    );
-	  }
-	});
+	module.exports = "import React from 'react';\nimport {Field, Form} from 'formwood';\n\n\nconst InputField = Field(React.createClass({\n  render() {\n    return (\n      <div className=\"form-group\">\n        <label className=\"control-label\" htmlFor={this.props.id}>{this.props.label}</label>\n        <input className=\"form-control\" {...this.props.element}/>\n      </div>\n    );\n  }\n}));\n\nexport default React.createClass({\n  handleSubmit(e, form) {\n    this.setState({values: form.values});\n  },\n\n  render() {\n    const values = this.state ? this.state.values : {};\n    return (\n      <Form onSubmit={this.handleSubmit}>\n        <h2>Basic Form</h2>\n        <InputField type=\"text\" name=\"username\" id=\"username\" label=\"Username\"/>\n        <InputField type=\"password\" name=\"password\" id=\"password\" label=\"Password\"/>\n        <button className=\"btn btn-primary\" type=\"submit\">Submit</button>\n        <pre className=\"alert alert-success\">{JSON.stringify(values, null, 2)}</pre>\n      </Form>\n    );\n  }\n});\n"
 
 /***/ },
 /* 475 */
@@ -31119,6 +31096,7 @@
 
 	var InputField = (0, _formwood.Field)(_react2.default.createClass({
 	  displayName: 'InputField',
+	  // fold-start
 	  render: function render() {
 	    return _react2.default.createElement(
 	      'div',
@@ -31135,13 +31113,15 @@
 	        this.props.message
 	      )
 	    );
-	  }
+	  } // fold-end
+
 	}));
 
 	function mockPost() {
+	  // fold-start
 	  return new Promise(function (resolve) {
 	    setTimeout(resolve, 500);
-	  });
+	  }); // fold-end
 	}
 
 	exports.default = _react2.default.createClass({
@@ -31189,21 +31169,6 @@
 	      _react2.default.createElement(
 	        'ul',
 	        { className: 'list-unstyled' },
-	        _react2.default.createElement(
-	          'li',
-	          null,
-	          _react2.default.createElement(
-	            'code',
-	            null,
-	            'InputField'
-	          ),
-	          ' is shown in the ',
-	          _react2.default.createElement(
-	            'a',
-	            { href: '#basic-form', className: 'alert-link' },
-	            'Basic Form'
-	          )
-	        ),
 	        _react2.default.createElement(
 	          'li',
 	          null,
@@ -31263,69 +31228,9 @@
 
 /***/ },
 /* 477 */
-/***/ function(module, exports, __webpack_require__) {
+/***/ function(module, exports) {
 
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-
-	var _react = __webpack_require__(299);
-
-	var _react2 = _interopRequireDefault(_react);
-
-	var _prismjs = __webpack_require__(471);
-
-	var _prismjs2 = _interopRequireDefault(_prismjs);
-
-	var _fieldValidation = __webpack_require__(478);
-
-	var _fieldValidation2 = _interopRequireDefault(_fieldValidation);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	var _code = 'function required() {\n  return (value) => {\n    if (Boolean(value) === false) {\n      return \'Required\';\n    }\n  };\n};\n\nfunction minLength(length) {\n  return (value) => {\n    if (!value || value.length < length) {\n      return `Must be at least ${length} characters`\n    }\n  };\n}\n\nexport default React.createClass({\n  handleSubmit(e, form) {\n    if (form.valid) {\n      this.setState({values: form.values});\n    }\n  },\n\n  render() {\n    const values = this.state ? this.state.values : {};\n    return (\n      <Form onSubmit={this.handleSubmit} values={this.state.formValues}>\n        <h2>Field Validation</h2>\n        <InputField type="text" name="username" label="Username" validators={[required(), minLength(3)]}/>\n        <InputField type="password" name="password" label="Password" validators={[required(), minLength(6)]}/>\n        <button className="btn btn-primary" type="submit">Submit</button>\n        <pre className="alert alert-success">{JSON.stringify(values, null, 2)}</pre>\n        <ul className="list-unstyled">\n          <li><code>InputField</code> is shown in the <a href="#basic-form" className="alert-link">Basic Form</a></li>\n        </ul>\n      </Form>\n    );\n  }\n});';
-
-	exports.default = _react2.default.createClass({
-	  displayName: 'field-validation-display',
-	  code: function code() {
-	    return {
-	      '__html': _prismjs2.default.highlight(_code, _prismjs2.default.languages.javascript)
-	    };
-	  },
-	  render: function render() {
-	    return _react2.default.createElement(
-	      'section',
-	      this.props,
-	      _react2.default.createElement(
-	        'div',
-	        { className: 'example-form' },
-	        _react2.default.createElement(
-	          'div',
-	          { className: 'container-fluid' },
-	          _react2.default.createElement(
-	            'div',
-	            { className: 'row' },
-	            _react2.default.createElement(
-	              'div',
-	              { className: 'col-xs-12' },
-	              _react2.default.createElement(_fieldValidation2.default, null)
-	            )
-	          )
-	        )
-	      ),
-	      _react2.default.createElement(
-	        'div',
-	        { className: 'example-code' },
-	        _react2.default.createElement('pre', {
-	          className: 'language-javascript',
-	          dangerouslySetInnerHTML: this.code()
-	        })
-	      )
-	    );
-	  }
-	});
+	module.exports = "import React from 'react';\nimport {Field, Form} from 'formwood';\nimport {minLength, required} from '../validators';\n\nconst InputField = Field(React.createClass({ // fold-start\n  render() {\n    return (\n      <div className={`form-group ${this.props.message ? 'has-error' : ''}`}>\n        <label className=\"control-label\" htmlFor={this.props.id}>{this.props.label}</label>\n        <input className=\"form-control\" {...this.props.element}/>\n        <span className=\"help-block\">{this.props.message}</span>\n      </div>\n    );\n  } // fold-end\n}));\n\nfunction mockPost() { // fold-start\n  return new Promise((resolve) => {\n    setTimeout(resolve, 500);\n  }); // fold-end\n}\n\nexport default React.createClass({\n  getInitialState() {\n    return {\n      messages: {},\n      values: {}\n    }\n  },\n\n  handleSubmit(e, form) {\n    if (form.valid) {\n      this.setState({values: form.values, messages: {}})\n\n      mockPost(form.values).then(() => {\n        this.setState({\n          messages: {username: 'Username already exists'}\n        });\n      });\n    }\n  },\n\n  render() {\n    return (\n      <Form onSubmit={this.handleSubmit} messages={this.state.messages}>\n        <h2>Form Validation</h2>\n        <InputField type=\"text\" name=\"username\" label=\"Username\" validators={[required()]}/>\n        <InputField type=\"password\" name=\"password\" label=\"Password\"/>\n        <button className=\"btn btn-primary\" type=\"submit\">Submit</button>\n        <pre className=\"alert alert-success\">{JSON.stringify(this.state.values, null, 2)}</pre>\n        <ul className=\"list-unstyled\">\n          <li><code>Validators</code> are shown in <a href=\"#field-validation\" className=\"alert-link\">Field Validation</a></li>\n        </ul>\n      </Form>\n    );\n  }\n});\n"
 
 /***/ },
 /* 478 */
@@ -31348,23 +31253,26 @@
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	function required() {
+	  // fold-start
 	  return function (value) {
 	    if (Boolean(value) === false) {
 	      return 'Required';
 	    }
-	  };
+	  }; // fold-end
 	};
 
 	function minLength(length) {
+	  // fold-start
 	  return function (value) {
 	    if (!value || value.length < length) {
 	      return 'Must be at least ' + length + ' characters';
 	    }
-	  };
+	  }; // fold-end
 	}
 
 	var InputField = (0, _formwood.Field)(_react2.default.createClass({
 	  displayName: 'InputField',
+	  // fold-start
 	  render: function render() {
 	    return _react2.default.createElement(
 	      'div',
@@ -31381,7 +31289,8 @@
 	        this.props.message
 	      )
 	    );
-	  }
+	  } // fold-end
+
 	}));
 
 	exports.default = _react2.default.createClass({
@@ -31412,25 +31321,6 @@
 	        'pre',
 	        { className: 'alert alert-success' },
 	        JSON.stringify(values, null, 2)
-	      ),
-	      _react2.default.createElement(
-	        'ul',
-	        { className: 'list-unstyled' },
-	        _react2.default.createElement(
-	          'li',
-	          null,
-	          _react2.default.createElement(
-	            'code',
-	            null,
-	            'InputField'
-	          ),
-	          ' is shown in the ',
-	          _react2.default.createElement(
-	            'a',
-	            { href: '#basic-form', className: 'alert-link' },
-	            'Basic Form'
-	          )
-	        )
 	      )
 	    );
 	  }
@@ -31438,69 +31328,9 @@
 
 /***/ },
 /* 479 */
-/***/ function(module, exports, __webpack_require__) {
+/***/ function(module, exports) {
 
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-
-	var _react = __webpack_require__(299);
-
-	var _react2 = _interopRequireDefault(_react);
-
-	var _prismjs = __webpack_require__(471);
-
-	var _prismjs2 = _interopRequireDefault(_prismjs);
-
-	var _initialValues = __webpack_require__(480);
-
-	var _initialValues2 = _interopRequireDefault(_initialValues);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	var _code = 'const SelectField = Field(React.createClass({\n  render() {\n    return (\n      <div className="form-group">\n        <label>{this.props.label}</label>\n        <select {...this.props.element} className="form-control">\n          {this.props.children}\n        </select>\n      </div>\n    );\n  }\n}));\n\nconst CheckboxField = Field(React.createClass({\n  render() {\n    return (\n      <div className="form-group">\n        <div className="checkbox">\n          <label>\n            <input type="checkbox" {...this.props.element}/> {this.props.label}\n          </label>\n        </div>\n      </div>\n    );\n  }\n}));\n\nexport default React.createClass({\n  handleSubmit(e, form) {\n    this.setState({values: form.values});\n  },\n\n  render() {\n    const values = this.state ? this.state.values : {};\n    const initialValues = {\n      city: \'Toronto\',\n      color: [\'green\', \'blue\'],\n      fruit: \'Papaya\'\n    };\n\n    return (\n      <Form onSubmit={this.handleSubmit} values={initialValues}>\n        <h2>Initial Values</h2>\n        <InputField type="text" name="city" label="City"/>\n        <CheckboxField type="checkbox" name="color" value="red" label="Red"/>\n        <CheckboxField type="checkbox" name="color" value="green" label="Green"/>\n        <CheckboxField type="checkbox" name="color" value="blue" label="Blue"/>\n        <SelectField name="fruit" label="Fruit">\n          <option>Banana</option>\n          <option>Mango</option>\n          <option>Papaya</option>\n        </SelectField>\n        <button className="btn btn-primary" type="submit">Submit</button>\n        <pre className="alert alert-success">{JSON.stringify(values, null, 2)}</pre>\n        <ul className="list-unstyled">\n          <li><code>InputField</code> is shown in the <a href="#basic-form" className="alert-link">Basic Form</a></li>\n        </ul>\n      </Form>\n    );\n  }\n});';
-
-	exports.default = _react2.default.createClass({
-	  displayName: 'initial-values-display',
-	  code: function code() {
-	    return {
-	      '__html': _prismjs2.default.highlight(_code, _prismjs2.default.languages.javascript)
-	    };
-	  },
-	  render: function render() {
-	    return _react2.default.createElement(
-	      'section',
-	      this.props,
-	      _react2.default.createElement(
-	        'div',
-	        { className: 'example-form' },
-	        _react2.default.createElement(
-	          'div',
-	          { className: 'container-fluid' },
-	          _react2.default.createElement(
-	            'div',
-	            { className: 'row' },
-	            _react2.default.createElement(
-	              'div',
-	              { className: 'col-xs-12' },
-	              _react2.default.createElement(_initialValues2.default, null)
-	            )
-	          )
-	        )
-	      ),
-	      _react2.default.createElement(
-	        'div',
-	        { className: 'example-code' },
-	        _react2.default.createElement('pre', {
-	          className: 'language-javascript',
-	          dangerouslySetInnerHTML: this.code()
-	        })
-	      )
-	    );
-	  }
-	});
+	module.exports = "import React from 'react';\nimport {Field, Form} from 'formwood';\n\nfunction required() { // fold-start\n  return (value) => {\n    if (Boolean(value) === false) {\n      return 'Required';\n    }\n  }; // fold-end\n};\n\nfunction minLength(length) { // fold-start\n  return (value) => {\n    if (!value || value.length < length) {\n      return `Must be at least ${length} characters`\n    }\n  }; // fold-end\n}\n\nconst InputField = Field(React.createClass({ // fold-start\n  render() {\n    return (\n      <div className={`form-group ${this.props.message ? 'has-error' : ''}`}>\n        <label className=\"control-label\" htmlFor={this.props.id}>{this.props.label}</label>\n        <input className=\"form-control\" {...this.props.element}/>\n        <span className=\"help-block\">{this.props.message}</span>\n      </div>\n    );\n  } // fold-end\n}));\n\nexport default React.createClass({\n  handleSubmit(e, form) {\n    if (form.valid) {\n      this.setState({values: form.values});\n    }\n  },\n\n  render() {\n    const values = this.state ? this.state.values : {};\n    return (\n      <Form onSubmit={this.handleSubmit}>\n        <h2>Field Validation</h2>\n        <InputField type=\"text\" name=\"username\" label=\"Username\" validators={[required(), minLength(3)]}/>\n        <InputField type=\"password\" name=\"password\" label=\"Password\" validators={[required(), minLength(6)]}/>\n        <button className=\"btn btn-primary\" type=\"submit\">Submit</button>\n        <pre className=\"alert alert-success\">{JSON.stringify(values, null, 2)}</pre>\n      </Form>\n    );\n  }\n});\n\n"
 
 /***/ },
 /* 480 */
@@ -31524,6 +31354,7 @@
 
 	var InputField = (0, _formwood.Field)(_react2.default.createClass({
 	  displayName: 'InputField',
+	  // fold-start
 	  render: function render() {
 	    return _react2.default.createElement(
 	      'div',
@@ -31535,11 +31366,13 @@
 	      ),
 	      _react2.default.createElement('input', _extends({ className: 'form-control' }, this.props.element))
 	    );
-	  }
+	  } // fold-end
+
 	}));
 
 	var SelectField = (0, _formwood.Field)(_react2.default.createClass({
 	  displayName: 'SelectField',
+	  // fold-start
 	  render: function render() {
 	    return _react2.default.createElement(
 	      'div',
@@ -31555,11 +31388,13 @@
 	        this.props.children
 	      )
 	    );
-	  }
+	  } // fold-end
+
 	}));
 
 	var CheckboxField = (0, _formwood.Field)(_react2.default.createClass({
 	  displayName: 'CheckboxField',
+	  // fold-start
 	  render: function render() {
 	    return _react2.default.createElement(
 	      'div',
@@ -31576,7 +31411,8 @@
 	        )
 	      )
 	    );
-	  }
+	  } // fold-end
+
 	}));
 
 	exports.default = _react2.default.createClass({
@@ -31632,25 +31468,6 @@
 	        'pre',
 	        { className: 'alert alert-success' },
 	        JSON.stringify(values, null, 2)
-	      ),
-	      _react2.default.createElement(
-	        'ul',
-	        { className: 'list-unstyled' },
-	        _react2.default.createElement(
-	          'li',
-	          null,
-	          _react2.default.createElement(
-	            'code',
-	            null,
-	            'InputField'
-	          ),
-	          ' is shown in the ',
-	          _react2.default.createElement(
-	            'a',
-	            { href: '#basic-form', className: 'alert-link' },
-	            'Basic Form'
-	          )
-	        )
 	      )
 	    );
 	  }
@@ -31658,326 +31475,9 @@
 
 /***/ },
 /* 481 */
-/***/ function(module, exports, __webpack_require__) {
+/***/ function(module, exports) {
 
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-
-	var _react = __webpack_require__(299);
-
-	var _react2 = _interopRequireDefault(_react);
-
-	var _prismjs = __webpack_require__(471);
-
-	var _prismjs2 = _interopRequireDefault(_prismjs);
-
-	var _advancedForm = __webpack_require__(482);
-
-	var _advancedForm2 = _interopRequireDefault(_advancedForm);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	var _code = 'const InputField = Field(React.createClass({\n  handleChange(e) {\n    this.props.element.onChange(e).then(this.props.validate);\n  },\n\n  render() {\n    let classNames = "form-group";\n    if (!this.props.valid) {\n      classNames += " has-error";\n    }\n    return (\n      <div className={classNames}>\n        <label className="control-label" htmlFor={this.props.id}>{this.props.label}</label>\n        <input autoComplete="off" className="form-control" {...this.props.element} onChange={this.handleChange} onBlur={this.handleBlur}/>\n        <span className="help-block">{this.props.message}</span>\n      </div>\n    );\n  }\n}));\n\nconst RadioField = Field(React.createClass({\n  render() {\n    return (\n      <div className="radio">\n        <label>\n          <input type="radio" {...this.props.element} />\n            {this.props.label}\n        </label>\n        <span className="help-block">{this.props.message}</span>\n      </div>\n    );\n  }\n}));\n\nconst CheckboxField = Field(React.createClass({\n  render() {\n    let classNames = "form-group";\n    if (!this.props.valid) {\n      classNames += " has-error";\n    }\n    return (\n      <div className={classNames}>\n        <div className="checkbox">\n          <label>\n            <input type="checkbox" {...this.props.element} />\n              {this.props.label}\n          </label>\n          <span className="help-block">{this.props.message}</span>\n        </div>\n      </div>\n    );\n  }\n}));\n\nconst CheckboxField2 = React.createClass({\n  render() {\n    let classNames = "form-group";\n    if (!this.props.valid) {\n      classNames += " has-error";\n    }\n    return (\n      <div className={classNames}>\n        <div className="checkbox">\n          <label>\n            <input type="checkbox" {...this.props.element} />\n              {this.props.label}\n          </label>\n        </div>\n      </div>\n    );\n  }\n});\n\nconst SelectField = Field(React.createClass({\n  render() {\n    return (\n      <select {...this.props.element} className="form-control">\n        <option>ants</option>\n        <option>bees</option>\n        <option>cats</option>\n        <option>4</option>\n        <option>5</option>\n      </select>\n    );\n  }\n}));\n\nfunction selectTwo(name) {\n  return () => {\n    let values = 0;\n    document.getElementsByName(name).forEach((field) => {\n      if (field.checked) { values += 1; }\n    });\n\n    if (values < 2) { return "Select at least two"; }\n\n    return true;\n  }\n}\n\nconst FavFruits = Field(React.createClass({\n  render() {\n    return (\n      <div>\n        <CheckboxField2 element={this.props.element} value="apple" label="Apple"/>\n        <CheckboxField2 element={this.props.element} value="banana" label="Banana"/>\n        <CheckboxField2 element={this.props.element} value="mango" label="Mango"/>\n        <span className="help-block">{this.props.message}</span>\n      </div>\n    );\n  }\n}));\n\nexport default React.createClass({\n  getInitialState() {\n    return {\n      values: {\n        username: {value: \'Hi\', message: \'hi\'},\n        colour: {value: "green"},\n        //sel: {value: "bees"},\n        "fav-fruits": {value: "apple"}\n      }\n    }\n  },\n\n  handleSubmit(e, form) {\n    //console.log(JSON.stringify(form.values));\n    console.log(this.form.invalidFields);\n    //this.setState({values: {username: {message: \'wtffff\'}}});\n  },\n\n  passwordValue() {\n    if (this.form) {\n      return this.form.getField(\'password\').state.value;\n    }\n  },\n\n\n  blah() {\n    return (\n      <div>\n        <RadioField name="colour" value="red" label="Red"/>\n        <RadioField name="colour" value="green" label="Green"/>\n        <RadioField name="colour" value="blue" label="Blue"/>\n      </div>\n    );\n  },\n\n  render() {\n    return (\n      <Form onSubmit={this.handleSubmit} values={this.state.values} ref={(form) => { this.form = form; }}>\n        <h2>Advanced Form</h2>\n        <InputField type="text" name="username" id="username" label="Username" validators={[required(), minLength(4)]}/>\n        <InputField type="password" name="password" id="password" label="Password" validators={[required(), minLength(6)]}/>\n        <InputField type="password" name="password-confirm" id="password-confirm" label="Confirm" validators={[required(), passwordEquals(this.passwordValue)]}/>\n        {this.blah()}\n        <br/>\n        <SelectField name="sel" multiple={true}/>\n        <br/>\n        <FavFruits name="fav-fruits" validators={[selectTwo("fav-fruits")]} />\n\n        <InputField type="email" name="email" />\n        <CheckboxField name="beep" label="Beep" validators={[required()]} />\n        <button className="btn btn-primary" type="submit">Submit</button>\n      </Form>\n    );\n  }\n});';
-
-	exports.default = _react2.default.createClass({
-	  displayName: 'advanced-form-display',
-	  code: function code() {
-	    return {
-	      '__html': _prismjs2.default.highlight(_code, _prismjs2.default.languages.javascript)
-	    };
-	  },
-	  render: function render() {
-	    return _react2.default.createElement(
-	      'section',
-	      this.props,
-	      _react2.default.createElement(
-	        'div',
-	        { className: 'example-form' },
-	        _react2.default.createElement(
-	          'div',
-	          { className: 'container-fluid' },
-	          _react2.default.createElement(
-	            'div',
-	            { className: 'row' },
-	            _react2.default.createElement(
-	              'div',
-	              { className: 'col-xs-12' },
-	              _react2.default.createElement(_advancedForm2.default, null)
-	            )
-	          )
-	        )
-	      ),
-	      _react2.default.createElement(
-	        'div',
-	        { className: 'example-code' },
-	        _react2.default.createElement('pre', {
-	          className: 'language-javascript',
-	          dangerouslySetInnerHTML: this.code()
-	        })
-	      )
-	    );
-	  }
-	});
-
-/***/ },
-/* 482 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-
-	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
-
-	var _react = __webpack_require__(299);
-
-	var _react2 = _interopRequireDefault(_react);
-
-	var _formwood = __webpack_require__(473);
-
-	var _validators = __webpack_require__(476);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	var InputField = (0, _formwood.Field)(_react2.default.createClass({
-	  displayName: 'InputField',
-	  handleChange: function handleChange(e) {
-	    this.props.element.onChange(e).then(this.props.validate);
-	  },
-	  render: function render() {
-	    var classNames = "form-group";
-	    if (!this.props.valid) {
-	      classNames += " has-error";
-	    }
-	    return _react2.default.createElement(
-	      'div',
-	      { className: classNames },
-	      _react2.default.createElement(
-	        'label',
-	        { className: 'control-label', htmlFor: this.props.id },
-	        this.props.label
-	      ),
-	      _react2.default.createElement('input', _extends({ autoComplete: 'off', className: 'form-control' }, this.props.element, { onChange: this.handleChange, onBlur: this.handleBlur })),
-	      _react2.default.createElement(
-	        'span',
-	        { className: 'help-block' },
-	        this.props.message
-	      )
-	    );
-	  }
-	}));
-
-	var RadioField = (0, _formwood.Field)(_react2.default.createClass({
-	  displayName: 'RadioField',
-	  render: function render() {
-	    return _react2.default.createElement(
-	      'div',
-	      { className: 'radio' },
-	      _react2.default.createElement(
-	        'label',
-	        null,
-	        _react2.default.createElement('input', _extends({ type: 'radio' }, this.props.element)),
-	        this.props.label
-	      ),
-	      _react2.default.createElement(
-	        'span',
-	        { className: 'help-block' },
-	        this.props.message
-	      )
-	    );
-	  }
-	}));
-
-	var CheckboxField = (0, _formwood.Field)(_react2.default.createClass({
-	  displayName: 'CheckboxField',
-	  render: function render() {
-	    var classNames = "form-group";
-	    if (!this.props.valid) {
-	      classNames += " has-error";
-	    }
-	    return _react2.default.createElement(
-	      'div',
-	      { className: classNames },
-	      _react2.default.createElement(
-	        'div',
-	        { className: 'checkbox' },
-	        _react2.default.createElement(
-	          'label',
-	          null,
-	          _react2.default.createElement('input', _extends({ type: 'checkbox' }, this.props.element)),
-	          this.props.label
-	        ),
-	        _react2.default.createElement(
-	          'span',
-	          { className: 'help-block' },
-	          this.props.message
-	        )
-	      )
-	    );
-	  }
-	}));
-
-	var CheckboxField2 = _react2.default.createClass({
-	  displayName: 'CheckboxField2',
-	  render: function render() {
-	    var classNames = "form-group";
-	    if (!this.props.valid) {
-	      classNames += " has-error";
-	    }
-	    return _react2.default.createElement(
-	      'div',
-	      { className: classNames },
-	      _react2.default.createElement(
-	        'div',
-	        { className: 'checkbox' },
-	        _react2.default.createElement(
-	          'label',
-	          null,
-	          _react2.default.createElement('input', _extends({ type: 'checkbox' }, this.props.element)),
-	          this.props.label
-	        )
-	      )
-	    );
-	  }
-	});
-
-	var SelectField = (0, _formwood.Field)(_react2.default.createClass({
-	  displayName: 'SelectField',
-	  render: function render() {
-	    return _react2.default.createElement(
-	      'select',
-	      _extends({}, this.props.element, { className: 'form-control' }),
-	      _react2.default.createElement(
-	        'option',
-	        null,
-	        'ants'
-	      ),
-	      _react2.default.createElement(
-	        'option',
-	        null,
-	        'bees'
-	      ),
-	      _react2.default.createElement(
-	        'option',
-	        null,
-	        'cats'
-	      ),
-	      _react2.default.createElement(
-	        'option',
-	        null,
-	        '4'
-	      ),
-	      _react2.default.createElement(
-	        'option',
-	        null,
-	        '5'
-	      )
-	    );
-	  }
-	}));
-
-	function selectTwo(name) {
-	  return function () {
-	    var values = 0;
-	    document.getElementsByName(name).forEach(function (field) {
-	      if (field.checked) {
-	        values += 1;
-	      }
-	    });
-
-	    if (values < 2) {
-	      return "Select at least two";
-	    }
-
-	    return true;
-	  };
-	}
-
-	var FavFruits = (0, _formwood.Field)(_react2.default.createClass({
-	  displayName: 'FavFruits',
-	  render: function render() {
-	    return _react2.default.createElement(
-	      'div',
-	      null,
-	      _react2.default.createElement(CheckboxField2, { element: this.props.element, value: 'apple', label: 'Apple' }),
-	      _react2.default.createElement(CheckboxField2, { element: this.props.element, value: 'banana', label: 'Banana' }),
-	      _react2.default.createElement(CheckboxField2, { element: this.props.element, value: 'mango', label: 'Mango' }),
-	      _react2.default.createElement(
-	        'span',
-	        { className: 'help-block' },
-	        this.props.message
-	      )
-	    );
-	  }
-	}));
-
-	exports.default = _react2.default.createClass({
-	  displayName: 'advanced-form',
-	  getInitialState: function getInitialState() {
-	    return {
-	      values: {
-	        username: { value: 'Hi', message: 'hi' },
-	        colour: { value: "green" },
-	        //sel: {value: "bees"},
-	        "fav-fruits": { value: "apple" }
-	      }
-	    };
-	  },
-	  handleSubmit: function handleSubmit(e, form) {
-	    //console.log(JSON.stringify(form.values));
-	    console.log(this.form.invalidFields);
-	    //this.setState({values: {username: {message: 'wtffff'}}});
-	  },
-	  passwordValue: function passwordValue() {
-	    if (this.form) {
-	      return this.form.getField('password').state.value;
-	    }
-	  },
-	  blah: function blah() {
-	    return _react2.default.createElement(
-	      'div',
-	      null,
-	      _react2.default.createElement(RadioField, { name: 'colour', value: 'red', label: 'Red' }),
-	      _react2.default.createElement(RadioField, { name: 'colour', value: 'green', label: 'Green' }),
-	      _react2.default.createElement(RadioField, { name: 'colour', value: 'blue', label: 'Blue' })
-	    );
-	  },
-	  render: function render() {
-	    var _this = this;
-
-	    return _react2.default.createElement(
-	      _formwood.Form,
-	      { onSubmit: this.handleSubmit, values: this.state.values, ref: function ref(form) {
-	          _this.form = form;
-	        } },
-	      _react2.default.createElement(
-	        'h2',
-	        null,
-	        'Advanced Form'
-	      ),
-	      _react2.default.createElement(InputField, { type: 'text', name: 'username', id: 'username', label: 'Username', validators: [(0, _validators.required)(), (0, _validators.minLength)(4)] }),
-	      _react2.default.createElement(InputField, { type: 'password', name: 'password', id: 'password', label: 'Password', validators: [(0, _validators.required)(), (0, _validators.minLength)(6)] }),
-	      _react2.default.createElement(InputField, { type: 'password', name: 'password-confirm', id: 'password-confirm', label: 'Confirm', validators: [(0, _validators.required)(), (0, _validators.passwordEquals)(this.passwordValue)] }),
-	      this.blah(),
-	      _react2.default.createElement('br', null),
-	      _react2.default.createElement(SelectField, { name: 'sel', multiple: true }),
-	      _react2.default.createElement('br', null),
-	      _react2.default.createElement(FavFruits, { name: 'fav-fruits', validators: [selectTwo("fav-fruits")] }),
-	      _react2.default.createElement(InputField, { type: 'email', name: 'email' }),
-	      _react2.default.createElement(CheckboxField, { name: 'beep', label: 'Beep', validators: [(0, _validators.required)()] }),
-	      _react2.default.createElement(
-	        'button',
-	        { className: 'btn btn-primary', type: 'submit' },
-	        'Submit'
-	      )
-	    );
-	  }
-	});
+	module.exports = "import React from 'react';\nimport {Field, Form} from 'formwood';\n\n\nconst InputField = Field(React.createClass({ // fold-start\n  render() {\n    return (\n      <div className=\"form-group\">\n        <label className=\"control-label\" htmlFor={this.props.id}>{this.props.label}</label>\n        <input className=\"form-control\" {...this.props.element}/>\n      </div>\n    );\n  } // fold-end\n}));\n\nconst SelectField = Field(React.createClass({ // fold-start\n  render() {\n    return (\n      <div className=\"form-group\">\n        <label>{this.props.label}</label>\n        <select {...this.props.element} className=\"form-control\">\n          {this.props.children}\n        </select>\n      </div>\n    );\n  } // fold-end\n}));\n\nconst CheckboxField = Field(React.createClass({ // fold-start\n  render() {\n    return (\n      <div className=\"form-group\">\n        <div className=\"checkbox\">\n          <label>\n            <input type=\"checkbox\" {...this.props.element}/> {this.props.label}\n          </label>\n        </div>\n      </div>\n    );\n  } // fold-end\n}));\n\nexport default React.createClass({\n  handleSubmit(e, form) {\n    this.setState({values: form.values});\n  },\n\n  render() {\n    const values = this.state ? this.state.values : {};\n    const initialValues = {\n      city: 'Toronto',\n      color: ['green', 'blue'],\n      fruit: 'Papaya'\n    };\n\n    return (\n      <Form onSubmit={this.handleSubmit} values={initialValues}>\n        <h2>Initial Values</h2>\n        <InputField type=\"text\" name=\"city\" label=\"City\"/>\n        <CheckboxField type=\"checkbox\" name=\"color\" value=\"red\" label=\"Red\"/>\n        <CheckboxField type=\"checkbox\" name=\"color\" value=\"green\" label=\"Green\"/>\n        <CheckboxField type=\"checkbox\" name=\"color\" value=\"blue\" label=\"Blue\"/>\n        <SelectField name=\"fruit\" label=\"Fruit\">\n          <option>Banana</option>\n          <option>Mango</option>\n          <option>Papaya</option>\n        </SelectField>\n        <button className=\"btn btn-primary\" type=\"submit\">Submit</button>\n        <pre className=\"alert alert-success\">{JSON.stringify(values, null, 2)}</pre>\n      </Form>\n    );\n  }\n});\n"
 
 /***/ }
 /******/ ]);
